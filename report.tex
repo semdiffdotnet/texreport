@@ -1,117 +1,6 @@
-
-%% bare_conf.tex
-%% V1.4b
-%% 2015/08/26
-%% by Michael Shell
-%% See:
-%% http://www.michaelshell.org/
-%% for current contact information.
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
-%% conference paper.
-%%
-%% Support sites:
-%% http://www.michaelshell.org/tex/ieeetran/
-%% http://www.ctan.org/pkg/ieeetran
-%% and
-%% http://www.ieee.org/
-
-%%*************************************************************************
-%% Legal Notice:
-%% This code is offered as-is without any warranty either expressed or
-%% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
-%% User assumes all risk.
-%% In no event shall the IEEE or any contributor to this code be liable for
-%% any damages or losses, including, but not limited to, incidental,
-%% consequential, or any other damages, resulting from the use or misuse
-%% of any information contained here.
-%%
-%% All comments are the opinions of their respective authors and are not
-%% necessarily endorsed by the IEEE.
-%%
-%% This work is distributed under the LaTeX Project Public License (LPPL)
-%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
-%% distributed and modified. A copy of the LPPL, version 1.3, is included
-%% in the base LaTeX documentation of all distributions of LaTeX released
-%% 2003/12/01 or later.
-%% Retain all contribution notices and credits.
-%% ** Modified files should be clearly indicated as such, including  **
-%% ** renaming them and changing author support contact information. **
-%%*************************************************************************
-
-
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. The IEEE's font choices and paper sizes can   ***
-% *** trigger bugs that do not appear when using other class files.       ***                          ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
-
-
-\documentclass[conference]{IEEEtran}
-% Some Computer Society conferences also require the compsoc mode option,
-% but others use the standard conference format.
-%
-% If IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it like:
-% \documentclass[conference]{../sty/IEEEtran}
-
-
-
-
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/pkg/ifpdf
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
-
-
-% *** CITATION PACKAGES ***
-%
-%\usepackage{cite}
-% cite.sty was written by Donald Arseneau
-% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
-% \cite{} output to follow that of the IEEE. Loading the cite package will
-% result in citation numbers being automatically sorted and properly
-% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
-% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
-% \cite will automatically add leading space, if needed. Use cite.sty's
-% noadjust option (cite.sty V3.8 and later) if you want to turn this off
-% such as if a citation ever needs to be enclosed in parenthesis.
-% cite.sty is already installed on most LaTeX systems. Be sure and use
-% version 5.0 (2009-03-20) and later if using hyperref.sty.
-% The latest version can be obtained at:
-% http://www.ctan.org/pkg/cite
-% The documentation is contained in the cite.sty file itself.
-
-
-
-
-
+\documentclass[10pt,draftclsnofoot,onecolumn]{IEEEtran}
+\usepackage{glossaries}
+\usepackage{url}
 
 % *** GRAPHICS RELATED PACKAGES ***
 %
@@ -154,68 +43,6 @@
 % http://www.tug.org/applications/pdftex
 
 
-
-
-
-% *** MATH PACKAGES ***
-%
-%\usepackage{amsmath}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics.
-%
-% Note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/pkg/amsmath
-
-
-
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/pkg/algorithms
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/pkg/algorithmicx
-
-
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/pkg/array
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-
-
 % *** SUBFIGURE PACKAGES ***
 %\ifCLASSOPTIONcompsoc
 %  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
@@ -240,186 +67,178 @@
 % http://www.ctan.org/pkg/subfig
 
 
-
-
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure.
-% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
-% corrections already built into the system in which case a warning will
-% be issued if an attempt is made to load fixltx2e.sty as it is no longer
-% needed.
-% The latest version and documentation can be found at:
-% http://www.ctan.org/pkg/fixltx2e
-
-
-%\usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/pkg/stfloats
-% Do not use the stfloats baselinefloat ability as the IEEE does not allow
-% \baselineskip to stretch. Authors submitting work to the IEEE should note
-% that the IEEE rarely uses double column equations and that authors should try
-% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
-% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
-% such ways.
-% Do not attempt to use stfloats with fixltx2e as they are incompatible.
-% Instead, use Morten Hogholm'a dblfloatfix which combines the features
-% of both fixltx2e and stfloats:
-%
-% \usepackage{dblfloatfix}
-% The latest version can be found at:
-% http://www.ctan.org/pkg/dblfloatfix
-
-
-
-
-% *** PDF, URL AND HYPERLINK PACKAGES ***
-%
-%\usepackage{url}
-% url.sty was written by Donald Arseneau. It provides better support for
-% handling and breaking URLs. url.sty is already installed on most LaTeX
-% systems. The latest version and documentation can be obtained at:
-% http://www.ctan.org/pkg/url
-% Basically, \url{my_url_here}.
-
-
-
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-% (Unless specifically asked to do so by the journal or conference you plan
-% to submit to, of course. )
-
-
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\makeglossaries
 
 \begin{document}
-%
-% paper title
-% Titles are generally capitalized except for words such as a, an, and, as,
-% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
-% not capitalized unless they are the first or last word of the title.
-% Linebreaks \\ can be used within to get better formatting as desired.
-% Do not put math or special symbols in the title.
-\title{Bare Demo of IEEEtran.cls\\ for IEEE Conferences}
+\title{Semantic Diff via C\# Compiler Platform}
 
-
-% author names and affiliations
-% use a multiple column layout for up to three different
-% affiliations
-\author{\IEEEauthorblockN{Michael Shell}
-\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
-Georgia Institute of Technology\\
-Atlanta, Georgia 30332--0250\\
-Email: http://www.michaelshell.org/contact.html}
-\and
-\IEEEauthorblockN{Homer Simpson}
-\IEEEauthorblockA{Twentieth Century Fox\\
-Springfield, USA\\
-Email: homer@thesimpsons.com}
-\and
-\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678--2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
-
-% conference papers do not typically use \thanks and this command
-% is locked out in conference mode. If really needed, such as for
-% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
-% after \documentclass
-
-% for over three affiliations, or if they all won't fit within the width
-% of the page, use this alternative format:
-% 
-%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
-%Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3}, 
-%Montgomery Scott\IEEEauthorrefmark{3} and
-%Eldon Tyrell\IEEEauthorrefmark{4}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
-%Georgia Institute of Technology,
-%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
-%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212, Fax: (888) 555--1212}
-%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
-
-
-
-
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
-
+\author{Shawn Fontaine, Cody Hoeft, Michael Rose\\
+	School of Electrical Engineering and Computer Science\\
+	Oregon State University}
 
 % make the title area
 \maketitle
+\thispagestyle{empty} %removes page number
 
-% As a general rule, do not put math, special symbols or citations
-% in the abstract
+
 \begin{abstract}
-The abstract goes here.
+A large project involves managing constantly changing repository, resolving merge conflicts, and trying to eliminate as many runtime errors as possible before they are introduced into the code base. Managers currently use purely text based diff tools to find any conflicts. Because these tools are text based and not semantic based, there is a higher probability that a runtime bug will be introduced into the code base.
+
+Our project is a Roslyn Analyzer that helps identify non-semantic changes that can be ignored and semantic changes that may introduce potential runtime errors. Users will install our NuGet package in Visual Studio to receive warnings.
+
+This project is designed to both reduce bug counts and save time for both the programmers and the project managers. By reducing potential runtime bugs, programmers will spend less time trying to replicate and debug runtime errors that can take large amounts of time to track down. The plugin should allow programmers and managers save time by producing code with fewer merge conflicts.
 \end{abstract}
-
-% no keywords
-
-
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
-
-
+\newpage
+\setcounter{page}{1}
 
 \section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
+\subsection{Overview}
+The purpose of this document is to demonstrate that SemDiff is currently at an alpha level release. This document starts with an introduction section that gives some background information and recaps our progress and goals. For each requirement we then have a section that restates the requirement and then describes progress toward that requirement. For every requirement, we will convey what work we have done, what work we have to do, show interesting code and images, and describe any problems that we have encountered. The document will then end with a short summary. Technical terms used throughout the document are explained in the Glossary at the end.
+
+\subsection{Background}
+Mass collaboration has a bulky overhead in a large software project. Git is one of the most popular version control systems and GitHub is the leading project hosting site for GitHub. The common workflow is that a developer will pick an issue (a bug or a new feature that needs to be worked on), make changes in a branch, then create a Pull Request. After the Pull Request is created, it is peer reviewed and then merged by management. Since repos contains hundreds of files and could have as many as 100 new pull requests a week it is impossible for every developer to be fully aware of all the pending changes. It is likely that at one point two developers will unintentionally make conflicting changes. Git uses a three-way merge to resolve most issues (this is referred to as text-based tool). This merge is generic and allows Git to use the same algorithm for all text files regardless of their content. However, the contents of files have lots of semantic information that is ignored.
+
+There are two different conflicts that will be covered here, false-positives and false-negatives. A false-negative occurs when text-based tools find a conflict, however semantically there is no conflict. On the other hand, a false-positive occurs when text-based tools don’t find a conflict, but semantically there is a conflict.
+
+An example of a false-positive, is the moved method conflict. Suppose that one developer, we will call him ‘A’, edits a method in a large file to fix a bug. He passes all tests so he creates a Pull Request with his changes. Before those changes are merged in, another developer, we will call him ‘B’, moves the same method that ‘A’ edited. ‘B’ might be moving the method because he was fixing a bug in another method and decided that moving the method made the code more readable. ‘B’ is unaware that ‘A’ edited the method because his environment provides no information about ‘B’s Pull Request. ‘B’s code passes all test, so he creates a Pull Request. Later their manager, we will call her ‘C’, verifies that the Pull Requests have been peer reviewed and attempts to merge them both in. One of the Pull Requests will merge correctly, however the other will fail because of the method conflict. This is a false-positive because semantically there is no conflict between ‘A’ and ‘B’s changes; the program will run the same wherever the method was moved or not. Because it failed to merge, now ‘C’ must take extra time to resolve the conflict and may require that ‘A’ and ‘B’ get involved to help figure out what happened.
+
+False-negatives are much subtler and can introduce runtime bugs that can be very difficult to track down. These conflicts usually occur across files that have a semantic connection. For example, ‘R’ is implementing a new `DatabaseLogger`. The project already has a generic `Logger` that write logs to console shown in Figure 1. ‘R’ creates a `DatabaseLogger` class derived from `Logger` and overrides the `Log` method with logic to store logs in a database. ‘R’ does not override `LogAll` because he sees that it merely delegates to the `Log` method. However, ‘S’ notices that it is inefficient for the `Logger` in Figure 1 to be calling `Log` for every log instead of writing them all at once, so ‘S’ creates the logger shown in Figure 2. ‘S’ is unaware of ‘R’s work and ‘S’ is unaware of ‘R’s work. When ‘C’ goes to merge their Pull Requests, she finds that they merge with out errors (after all they didn’t even edit the same files). Even though they merge without error (and both ‘R’ and ‘S’s versions worked correctly) there is now a bug in the code. Whenever the `DatabaseLogger`’s `LogAll` method is called it will not log to the database, but to console. Because of the subtle nature of this bug it may be a long time before it is noticed and it may be difficult to debug.
+
+The barrier to making tools that understand false-positives and false-negative is understanding the semantics of programs. With most languages this can be challenging because in order to get information about a program’s semantics it is necessary to build a parser, define an abstract syntax tree, and build all the logic for understanding what the syntax constructs do. All that work is redundant because the languages compiler already has to do all of that, moreover the compiler is the best source for semantic information because it implements the semantics. Sadly, most compilers are like black boxes, files go in and programs come out. Luckily the idea of the compiler as a service has become more popular. With a compiler as a service model, the compiler provides a rich set of APIs for inspecting and interpreting both the syntax trees and the semantic models of the code.
+
+In the last few years Microsoft has built a new C\# and VB compiler that uses the compiler as a service model. This compiler is commonly known as ‘Roslyn.’ Roslyn provides (among other things) a `SyntaxTree` object that represents the abstract syntax tree of a file, a `SemanticModel` object that represents how a single `SyntaxTree` is connected to others, and a `DiagnosticAnalyzer` interface. The `SyntaxTree` and `SemanticModel` both have a rich interface for querying their data and getting the semantic information from the code. This rich set of APIs lowers the bar for developers that want to analyze the semantics of their code, this is why Roslyn provides the `DiagnosticAnalyzer` abstract class. It provides call backs that can be bound to in order to easily implement some custom logic that can report `Diagnostic` messages back to Roslyn. When this analyzer is installed it is integrated into the Roslyn pipeline and any `Diagnostic` messages are shown alongside compiler generated messages. These analyzers are commonly packaged as NuGet packages and installed to projects much like other software dependencies can be installed. Additionally, the diagnostics are tied to the project therefore only one developer needs to install an analyzer for all the projects developers to start receiving messages.
+
+\subsection{Project Purpose and Goals}
+The solution to this problem explained in the background is a semantic merge tool that uses semantics to merge files instead of a text-based approach. However, such tools are hard to write and hard to maintain. From a management point of view, the benefits of text-based merging outweigh the time spent resolving the merge conflicts by hand and detect false-positives by having comprehensive test suites. However, most projects do not have great test coverage and developers would rather write code than handle merge conflicts.
+
+SemDiff hopes to find the middle ground between solving the problems of false-negatives and doing nothing to prevent them. SemDiff is a Roslyn analyzer that seeks to prevent false-negatives and false-positives before they happen by warning developers when we detect that their changes could cause a merge conflict. Both of the narratives in the background section could have been prevented by warning the developer that someone else was working on another in an area that could cause problems. If ‘A’ had known that ‘B’ had moved the method, he might have moved the method in his also. If ‘B’ had known that ‘A’ edited the method, he might not have moved it. Similarly, if ‘R’ had known about ‘S’s changes to the `Logger`, he would have implemented the `LogAll` method. Preventing these kinds of issues helps developers focus on code and not merge conflicts and helps prevent subtle bugs that are introduced by false-negatives.
+
+
+\subsection{Overall Progress}
+\subsubsection{Fall Term}
+All our planning happened Fall Term. The team met with Phillip Carter almost every weekend to talk about the project. The team decided upon splitting up the project into 4 major parts, handling GitHub interaction, false-positive detection, false-negative detection, and error message generation. The team also refined a requirement document and a design document. The requirement document is echoed in this report structure because it is the main standard that has guided development.
+
+\subsubsection{Winter Term (mid)}
+Winter term is when the coding began. There is still a big portion of coding left, but one of the three major sections is more or less complete, GitHub interaction. GitHub interaction is closer to beta than alpha, where false-positive and false-negative pieces are still in alpha. The minor pieces of this project range from alpha to beta. The interaction between parts of the project are not complete, but missing elements have been stubbed out and the missing elements are well defined. The warnings system works but needs testing and it not actually connected to any logic for providing meaningful errors. SemDiff can currently create a NuGet package, the NuGet package installs and will pull down data from GitHub, but critical functionality is incomplete.
+
+The team met with Phillip only once this term, on February 6th. This is by choice of both Phillip and the design team. There is much less to discuss unless the team runs into problems with Roslyn or has to communicate problems about the project. The meeting was more of a check-in than a discussion of what to do or where to go.
+
+The team has met weekly on Mondays to do a code review of any pull requests that have been submitted as well as hash out any questions or concerns a member has moving forward. The team’s communication outside of the meeting time has also been good and all the members have been on the same page, leaving few miscommunications and problems.
+
+\subsubsection{Winter Term (final)}
+
+
+\section{Project Progress}
+The following section details our progress on all of our requirements. For example, section 2.1 refers to requirement number 1 in our requirement document. The title of the section is a summary of the requirement; the actual requirement text is contained at the top of the section.
+
+\subsection{Query HitHub for Pull Request}
+“SemDiff will query the GitHub repo cloned in VS for pull request and the files changed”
+
+\subsubsection{Progress}
+SemDiff successfully queries GitHub and downloads all pull requests. The project keeps a list of pull requests and associated files. These pull requests are stored in a dictionary so that it is easy to determine if a pull request already exists locally. SemDiff has also implemented the ability to use OAuth to increase the number of API calls per hour from 60 to 5000. This is important because of the fact that each time SemDiff checks for pull requests, it has to check to see if there are any pull requests and then make another call for each pull request found.
+
+The current system works for the purposes of the project, but because of the interaction with GitHub and the potential IO calls, the developers are going to optimize the code. To optimize the code, the project will check and see if the pull requests have been updated on GitHub before downloading the files. This will be done through the use of HTTP header files in conjunction with GitHub’s header responses. This will both reduce the number of API calls against an IP or authenticated user, as well as reduce the number of files downloaded each time GitHub is queried for pull requests. 
+
+\subsubsection{Methodology}
+
+
+\subsubsection{Future Work}
+Before this requirement is complete we will need to handle the paginated format that GitHub uses. Currently if there are more than 20 pull requests open we cannot retrieve them all because they cannot be placed on the same page. The Implementation of this should be as simple as retrieving the url of the next page and (if it is not null) add the next page of pull requests to our list.
+
+As of our alpha, we currently do not reuse data. So when we go and get data from GitHub we get all of it again. In the analyzer this could result in a complete copy of all the pull requests being downloaded every 5 minutes. This can be fixed by using `ETag`s provided by GitHub to determine if the resources we are requesting has changed. If the resource has changed, we will need to cache enough information to determine if the pull request has Changed, Added, Deleted and take appropriate action (including deleting old files).
+
+\subsubsection{Problems}
+This is the hardest part of our system to test, but also the most critical for us to test. We will need to build up more advanced test suites to effectively test how our software will handle pull requests changing.
+
+Additionally, the GitHub API documentation is thorough, but there is no list of all the errors that the API can produce. This makes it hard for us to be sure that we are handling all the errors that could occur in the wild.
+
+\subsection{False-Positive Detection}
+“SemDiff will detect changes between two version of a file that will cause a text-based merge conflict but do not change the semantics of the code. This is defined as a false-positive. This will require at least partial completion of requirement 1, because we will need to know the format/state that we will receive files.
+“Specifically: Another developer moves a function, Foo(), in Bar.cs without changing the semantics and creates a pull request, the current developer edits Foo() in its original location in Bar.cs. This creates a false-positive.”
+
+\subsubsection{Progress}
+False-positive detection is still incomplete. Currently, a 3-way diff has been created to help identify where potential locations of false-positives may reside, but the algorithm to detect if these differences are false positives has yet to be implemented. The algorithm has been tested (see Methodology), and there are only issues with whitespace.
+
+\subsubsection{Methodology}
+
+
+\subsubsection{Future Work}
+
+
+\subsubsection{Problems}
+
+
+\subsection{False-Negative Detection}
+\subsubsection{Progress}
+
+
+\subsubsection{Methodology}
+
+
+\subsubsection{Future Work}
+
+
+\subsection{Displaying False-Positive Warnings in Error List}
+\subsubsection{Progress}
+
+
+\subsubsection{Future Work}
+
+
+\subsection{Displaying False-Negatives Warnings in Error List}
+\subsubsection{Progress}
+
+
+\subsubsection{Future Work}
+
+
+\subsection{NuGet Package}
+\subsubsection{Progress}
+
+
+\subsubsection{Future Work}
+
+
+\subsubsection{Problems}
+
+
+
+\subsection{Performance}
+
+
+\subsection{Informative Alerts}
+
+
+\subsection{GitHub Project Hosting}
+\subsubsection{Progress}
+
+
+\subsubsection{Future Work}
+
+
+\subsubsection{Problems}
+
+
+\subsection{MIT Licensing}
+
+
+\subsection{Documentation in Code}
+
+
+\subsection{Development Technology}
+
+
+\section{Conclusion}
+From the above information it is clear that we have an alpha level product. There is lots of work to do but we have a good start to having a well refined product at expo.
+
+
 
 \hfill mds
  
 \hfill August 26, 2015
-
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
-
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -517,26 +336,6 @@ Subsubsection text here.
 
 
 
-
-\section{Conclusion}
-The conclusion goes here.
-
-
-
-
-% conference papers do not normally have an appendix
-
-
-% use section* for acknowledgment
-\section*{Acknowledgment}
-
-
-The authors would like to thank...
-
-
-
-
-
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
 % adjust value as needed - may need to be readjusted if
@@ -570,7 +369,6 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
 
 
 
-% that's all folks
+\printglossaries
+
 \end{document}
-
-
