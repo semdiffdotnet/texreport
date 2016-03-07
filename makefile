@@ -1,8 +1,9 @@
-LATEX	= latex -shell-escape
-DVIPS	= dvips
-DVIPDF  = dvipdft
-XDVI	= xdvi -gamma 4
-GH		= gv
+BIN     = /usr/local/apps/tex_live/current/bin/x86_64-linux/
+LATEX	= $(BIN)latex -shell-escape
+DVIPS	= $(BIN)dvips
+DVIPDF  = $(BIN)dvipdft
+XDVI	= $(BIN)xdvi -gamma 4
+GH		= $(BIN)gv
 
 SRC	:= $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 TRG	= $(SRC:%.tex=%.dvi)
