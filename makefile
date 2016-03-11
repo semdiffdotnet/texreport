@@ -1,41 +1,32 @@
-BIN     = /usr/local/apps/tex_live/current/bin/x86_64-linux/
-LATEX	= $(BIN)latex -shell-escape
-DVIPS	= $(BIN)dvips
-DVIPDF  = $(BIN)dvipdft
-XDVI	= $(BIN)xdvi -gamma 4
-GH		= $(BIN)gv
+#Inspired by https://drewsilcock.co.uk/using-make-and-latexmk/
+BIN          = /usr/local/apps/tex_live/current/bin/x86_64-linux
+export PATH := $(BIN):$(PATH)
+SRC	        := $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
+PDF          = $(SRC:%.tex=%.pdf)
 
-SRC	:= $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
-TRG	= $(SRC:%.tex=%.dvi)
-PSF	= $(SRC:%.tex=%.ps)
-PDF	= $(SRC:%.tex=%.pdf)
+# If you want to reduce the output and/or 
+# dont want it to stop processing if error 
+# change the uncommented
+#
+# Very Loud, Stoping, Easier to find errors
+#OUTPUTMODE   =
+# Very Loud, No Stoping, Easier to find errors
+OUTPUTMODE   =-halt-on-error
+# Very Quiet, No Stoping, Hard to find errors
+#OUTPUTMODE   =-quiet
 
 pdf: $(PDF)
 
-ps: $(PSF)
-
-$(TRG): %.dvi: %.tex
-	$(LATEX) $<
-	$(LATEX) $<
-	$(LATEX) $<
-
-$(PSF):%.ps: %.dvi
-	$(DVIPS) -R -Poutline -t letter $< -o $@
-
-$(PDF): %.pdf: %.ps
-#	$(DVIPDF) -o $@ $<
-	ps2pdf $<
-
-show: $(TRG)
-	@for i in $(TRG) ; do $(XDVI) $$i & done
-
-showps: $(PSF)
-	@for i in $(PSF) ; do $(GH) $$i & done
+$(PDF): %.pdf: %.tex
+	latexmk $(OUTPUTMODE) -pdf $>
 
 all: pdf
 
+rebuild: clean all
+
 clean:
+	latexmk -C
 	rm -f *.pdf *.ps *.dvi *.out *.log *.aux *.bbl *.blg *.pyg
 
-.PHONY: all show clean ps pdf showps
+.PHONY: all clean pdf
 
