@@ -823,7 +823,7 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
     });
 }
 \end{lstlisting}
-\caption{The `ForFalseNegative` method handles false negative detection}
+\caption{The ForFalseNegative method handles false negative detection}
 \label{anforfn}
 \end{figure}
 
@@ -865,8 +865,7 @@ We will provide a link to the pull request.
 \subsubsection{Progress}
 
 The false positive warnings are being displayed as intended. The format of 
-warnings is `"False-Positive between '<<Name Of File>>' and '(<<Title of Pull 
-Request>>)[<<Link to Github>>]'"`. An example of a warning is shown in 
+warnings is `"False-Positive between '<<Name Of File>>' and '(<<Title of Pull Request>>)[<<Link to Github>>]'"`. An example of a warning is shown in 
 Figure~\ref{fperrorlist}. This warning was created by cloning the test repo 
 and checking out the “A” side (a similar message would be shown if “B” was 
 checked out). The location is also reported for false-positives, allowing 
@@ -875,7 +874,7 @@ Figure~\ref{fphoverover}.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalsePositiveErrorList}
+\includegraphics[scale=1]{FalsePositiveErrorList}
 
 \caption{Visual Studio’s error list showing a false-positive reported in the 
 test repo}
@@ -884,10 +883,10 @@ test repo}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalsePositiveHoverOver}
+\includegraphics[scale=1]{FalsePositiveHoverOver}
 
 \caption{False positives support warnings with squiggles and hover over 
-messages. This shows that the changes to `Function12` could cause a 
+messages. This shows that the changes to Function12 could cause a 
 false-positive}
 \label{fphoverover}
 \end{figure}
@@ -934,14 +933,13 @@ We will provide a link to the pull request.
 \subsubsection{Progress}
 
 The false negative warnings are being displayed as intended. The format of 
-warnings is `"False-Negatives for type '<<Type Name (Base Class)>>' between 
-'(<<Title of Pull Request>>)[<<Link to Github>>]'"`. An example of the 
+warnings is `"False-Negatives for type '<<Type Name (Base Class)>>' between '(<<Title of Pull Request>>)[<<Link to Github>>]'"`. An example of the 
 warning is shown in Figure~\ref{fnerrorlist}. That error was collected by 
 cloning the test repo and checking out the branch that creates a derived class.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalseNegativeErrorList}
+\includegraphics[scale=1]{FalseNegativeErrorList}
 
 \caption{Visual Studio’s error list showing two false-negatives reported in 
 the test repo}
@@ -981,7 +979,7 @@ information including the number of times the package has been downloaded.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{SemDiffInPackageManagerSmall}
+\includegraphics[scale=.75]{SemDiffInPackageManagerSmall}
 
 \caption{This is how the SemDiff package is displayed in the NuGet package 
 manager}
@@ -990,7 +988,7 @@ manager}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{SemDiffInPackageManager}
+\includegraphics[scale=1]{SemDiffInPackageManager}
 
 \caption{After the package is selected, this larger window is displayed in 
 the NuGet package manager}
@@ -1095,14 +1093,13 @@ motivational purpose of the project.
 
 The project source code is hosted on GitHub, and the team has also used the 
 issue tracking, pull requests, and milestone features built into GitHub. 
-Currently there are /ref{TODO} milestones, /ref{TODO} open issues, 
-/ref{TODO} closed issues, and /ref{TODO} closed pull requests. The wiki is 
-setup, but many pages remain incomplete. Figure~\ref{wikilist} shows the 
-pages that are currently created.
+Currently there are 4 milestones, 8 open issues, 18 closed issues, and 28 
+closed pull requests. The wiki is setup, but many pages remain incomplete. 
+Figure~\ref{wikilist} shows the pages that are currently created.
 
 \begin{figure}[!t]
-tho\centering
-\includegraphics[width=\textwidth]{WikiList}
+\centering
+\includegraphics[scale=1]{WikiList}
 
 \caption{List of all pages captured from the wiki}
 \label{wikilist}
@@ -1205,7 +1202,7 @@ SemDiff is implemented in C\# and uses the Roslyn APIs to compare syntax
 trees. Roslyn is used in multiple places, the most interesting uses of 
 Roslyn include the `Diff` object where Roslyn’s `GetChanges` method, shown 
 in Figure~\ref{diffcompare}, is used. Another interesting example is the 
-`ForFalseNegative` function, shown in Figure~\ref{analysisforfalsenegative}, 
+`ForFalseNegative` function, shown in Figure~\ref{anforfn}, 
 that uses the `SemanticModel` to find the base class of the current file.
 
 
@@ -1223,7 +1220,7 @@ The purpose of this section is to explain parts of SemDiff that are not
 directly written into the requirements document. While not fulfilling a 
 requirement, these are integral parts of the project.
 
-\subsubsection{Diff and Diff3}
+\subsection{Diff and Diff3}
 
 Determining the differences between text is a critical part of the system 
 because it is used detecting both False-Positives and False-Negatives. The 
@@ -1281,7 +1278,7 @@ public static IEnumerable<Diff> Compare(SyntaxTree ancestor, SyntaxTree changed)
     }
 }
 \end{lstlisting}
-\caption{The `Compare` function in the `Diff` class wraps the `GetChanges` 
+\caption{The Compare function in the Diff class wraps the GetChanges 
 function provided by Rosyn}
 \label{diffcompare}
 \end{figure}
@@ -1305,7 +1302,7 @@ function provided by Rosyn}
             };
         }
 \end{lstlisting}
-\caption{The `Compare` function in the `Diff3`class delegates to the `Diff` class and then returns a special result object}
+\caption{The Compare function in the Diff3 class delegates to the Diff class and then returns a special result object}
 \label{diff3compare}
 \end{figure}
 
@@ -1339,8 +1336,8 @@ private static IEnumerable<Conflict> GetConflicts(IEnumerable<Diff> local, IEnum
     yield break;
 }
 \end{lstlisting}
-\caption{The `GetConflicts` function in the `Diff3`class finds differing 
-spans that conflict. For each conflict found a `Conflict` object is returned}
+\caption{The GetConflicts function in the Diff3 class finds differing 
+spans that conflict. For each conflict found a Conflict object is returned}
 \label{diff3getconflicts}
 \end{figure}
 
