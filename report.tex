@@ -8,7 +8,8 @@
 \graphicspath{{./images/}}
 \DeclareGraphicsExtensions{.jpeg,.png}
 
-%Configure the lstlisting package https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings#Using_the_listings_package
+%Configure the lstlisting package 
+%https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings#Using_the_listings_package
 \lstdefinestyle{cSharp}{
 	language=[Sharp]C, 
 	basicstyle=\small\ttfamily, 
@@ -21,7 +22,8 @@
 }
 \lstMakeShortInline`
 
-% The IEEEtrans section headers do not make sence for us since we want our requrments to have numbers
+% The IEEEtrans section headers do not make sence for us since we want our 
+% requrments to have numbers
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\thesection.\arabic{subsection}}
 \renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
@@ -79,7 +81,25 @@
 \pagenumbering{gobble} %removes page number
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam auctor ligula at cursus. Nunc pretium, nulla sit amet sagittis volutpat, leo nisl luctus nibh, eu vehicula lorem leo quis diam. Phasellus in arcu vel felis tincidunt maximus in nec arcu. Phasellus neque lacus, malesuada non pulvinar sed, ornare et ex. Phasellus id suscipit purus, molestie egestas est. Nam placerat vel ex a ultricies. Praesent eros nisl, suscipit sit amet laoreet nec, rhoncus sit amet purus. Pellentesque semper quis ligula nec luctus. Sed ac odio porta, scelerisque risus in, fringilla libero. Pellentesque at vestibulum felis. Aliquam condimentum dapibus maximus. Pellentesque nec velit vel dolor dignissim iaculis sit amet auctor justo. Quisque commodo nunc nec ipsum rutrum, dignissim faucibus ligula vulputate. Sed bibendum dui tellus. Sed laoreet ut enim sit amet condimentum. Proin eget tortor dapibus, ultricies ligula sed, eleifend velit. Maecenas sit amet erat velit. Donec eu finibus mi. Aenean aliquam eleifend tellus. Aliquam pulvinar, dolor in fringilla lacinia, felis lacus iaculis elit, nec mattis risus velit eu lacus. Nunc blandit augue vel lorem eleifend, a fringilla enim condimentum cras amet.
+
+Large software projects involve constantly changing repositories, numerous 
+merge conflicts, and subtle runtime errors caused by semantic conflicts. 
+These issues represent a large investment of time that could be used to work
+on more meaningful changes to the project. Current merge tools only examine 
+differences in the actual text between versions of code. This approach does 
+not use the semantics of the code when comparing files, resulting in 
+unnecessary conflicts and subtle bugs being missed. SemDiff is a Roslyn 
+Analyzer for C\# projects that helps identify non-semantic code changes that 
+can be ignored as well as semantic changes that introduce potential runtime 
+errors. The solution for SemDiff produces a NuGet package that is installed 
+alongside Visual Studio. The package provides visual warnings of 
+non-meaningful conflicts and identifies potential locations for runtime 
+errors. The result is reduced bug counts and time saved for both developers 
+and project managers. Reducing potential runtime bugs allows developers to 
+spend less time replicating and debugging hard to find runtime errors. Less 
+merge conflicts will allow developers and managers to save time by not having 
+to resolve each merge conflict manually.
+
 \end{abstract}
 
 \newpage
@@ -89,77 +109,191 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam auctor ligul
 \pagenumbering{arabic}
 \section{Introduction}
 \subsection{Overview}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+
+This document is a progress report that details the motivation, purpose, 
+methodology, and results for the Semantic Diff via C\# Compiler Platform 
+(SemDiff) project. The introduction explains the motivation and purpose of 
+the project and provides a short background to explain the problem being 
+solved. The introduction concludes with SemDiff's overall progress. This 
+paper goes into a detailed explanation of each requirement for the project. 
+These sections are broken down into overall progress, current and future 
+work, problems encountered, and the solutions to problems when applicable. 
+Throughout the paper interesting code and images are included to further 
+explore and explain the parts of SemDiff. Near the end of the paper, an 
+overall conclusion that includes the current status of the project. The 
+glossary in the end defines technical terms used throughout the document.
 
 \subsection{Background}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+Mass collaboration for large software projects includes considerable 
+overhead. Repositories for these projects contain numerous developers and 
+dozens of pull requests a week. It is difficult, if not impossible, for 
+every developer to be fully aware of all pending changes to the repository. 
+Conflicting changes to a file often occur. The common workflow is that a 
+developer will identify an issue, a bug or new feature. This developer will 
+make a branch, code the changes and then create a pull request. After 
+creation of the pull request it is peer reviewed and merged into the 
+repository by management.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+One of the most popular version control systems is Git. In order to resolve 
+conflicts such as the above, git uses a three-way merge. A three-way merge 
+compares file 'A' and file 'B' while also considering the ancestor of both 
+files 'C'. If a section of code is found that differs in all three files it 
+is marked as a conflict and left for the user to resolve. This method of 
+identifying conflicts is entirely text based. The merge is generic and 
+allows Git to use the same algorithm for all text files regardless of their 
+content.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+Two major problems arise since current tools do not consider the meaning of 
+the code being compared. The first problem is when a conflict is identified 
+but within the code's semantics there should be no conflict. This is known 
+as a false-positive. For example consider the situation of the "moved 
+method" conflict. Suppose a developer, Adam, edits a method in a large file 
+to fix a big. Adam passes all tests so he creates a pull request with his 
+changes. Before the changes are merged in another developer, Bob, moves the 
+location of the method that Adam had edited. Bob might be moving the method 
+because he was refactoring the code, introducing a new method, or any number 
+of reasons. Bob is unaware that Adam edited the method because his 
+development environment provides no information about Adam's pull request. 
+Bob's code passes all tests so he creates a pull request. Later their 
+manager, Chris, verifies that the pull requests have been peer reviewed and 
+attempts to merge them both into the repository. One of the pull requests 
+will merge correctly, however the other will fail because of a conflict. 
+Semantically there is no conflict between Adam's and Bob's changes. The 
+program will run the same whether the method was moved or not. However, 
+Chris now must take extra time to manually review and resolve the conflict.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
-
-Lorem to figure \ref{fig_sim1} or \ref{fig_sim2} ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+The second problem is known as a false-negative. A false-negative occurs 
+when text-based tools do not find a conflict between changed files even 
+though there is a conflict. False-negatives are much more subtle and can 
+introduce runtime bugs that are difficult to track down. These conflicts 
+usually occur across files that have a semantic connection. For example a 
+developer, Ross, is implementing a new `DatabaseLogger`. The project already 
+has a generic `Logger` that writes logs to a console as shown in 
+Figure~\ref{example1}. Ross creates a `DatabaseLogger` class derived from 
+`Logger` and overrides the `Log` method with logic to store logs in a 
+database. Ross does not override `LogAll` because he sees that it merely 
+delegates to the `Log` method. However, another developer, Smith, notices 
+that it is inefficient for the `Logger` in Figure~\ref{example1} to be 
+calling `Log` for every log instead of writing them all at once, so Smith 
+creates the logger shown in Figure~\ref{example2}. Smith is unaware of Ross' 
+work and Ross is unaware of Smith's work. When the previous manager Chris 
+goes to merge their Pull Requests he finds that they merge with out errors. 
+After all they didn't even edit the same files. Even though they merge 
+without error and both Ross' and Smith's versions work correctly there is 
+now a bug in the code. Whenever the `DatabaseLogger`’s `LogAll` method is 
+called it will not log to the database but to the console. Because of the 
+subtle nature of this bug it may be a long time before it is noticed and 
+difficult to debug.
 
 \begin{figure}[!t]
 \centering
 \begin{lstlisting}
 public class Logger
 {
-	public virtual void Log(Log log)
-	{
-		Console.WriteLine(log);
-	}
-	public virtual void LogAll(IEnumerable<Log> logs)
-	{
-		foreach(var l in logs)
-		{
-			Log(l);
-		}
-	}
+    public virtual void Log(Log log)
+    {
+        Console.WriteLine(log);
+    }
+    public virtual void LogAll(IEnumerable<Log> logs)
+    {
+        foreach(var l in logs)
+        {
+            Log(l);
+        }
+    }
 }
 \end{lstlisting}
-\caption{Simulation results for the network.}
-\label{fig_sim1}
-\end{figure}
-
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{falsePositiveWarning}
-\caption{Simulation results for the network.}
-\label{fig_sim2}
-\end{figure}
-
-
-\begin{figure}[!t]
-\centering
-\begin{itemize}
-    \item One
-    \item Two
-    \item Three
-\end{itemize}
-\caption{Simulation results for the network.}
-\label{fig_sim3}
+\caption{Example for illustrating false-positive conflicts. Shows a generic 
+logger}
+\label{example1}
 \end{figure}
 
 \begin{figure}[!t]
 \centering
-\begin{enumerate}
-    \item One
-    \item Two
-    \item Three
-\end{enumerate}
-\caption{Simulation results for the network.}
-\label{fig_sim4}
+\begin{lstlisting}
+public class Logger
+{
+    public virtual void Log(Log log)
+    {
+        Console.WriteLine(log);
+    }
+    public virtual void LogAll(IEnumerable<Log> logs)
+    {
+        Console.WriteLine(string.Join(Environment.NewLine, logs));
+    }
+}
+\end{lstlisting}
+\caption{Example for illustrating false-positive conflicts. Shows an 
+override of the generic logger shown in Figure~\ref{example1}}
+\label{example2}
 \end{figure}
 
+Both of these problems illustrate the primary problem with current 
+solutions. A large amount of time is spent working on resolving conflicts 
+that should not occur in the first place and locating bugs that could have 
+been identified ahead of time. All of this time could be better spent by the 
+project managers. The barrier to making tools that solve this problem, such 
+as tools that can understand false-positives and false-negative is 
+understanding the semantics of programs. With most languages this can be 
+challenging because in order to get information about a program’s semantics 
+it is necessary to build a parser, define an abstract syntax tree, and build 
+all the logic for understanding what the syntax constructs do. All that work 
+is redundant because the languages compiler already has to do all of that, 
+moreover the compiler is the best source for semantic information because it 
+implements the semantics. Sadly, most compilers are black boxes, files go in 
+and programs come out. The idea of the compiler as a service has become more 
+popular. With a compiler as a service model, the compiler provides a rich 
+set of APIs for inspecting and interpreting both the syntax trees and the 
+semantic models of the code. 
+
+Recently, Microsoft has built a new C\# and VB compiler that uses the 
+compiler as a service model. This compiler is referred to as ‘Roslyn.’ 
+Roslyn provides (among other things) a `SyntaxTree` object that represents 
+the abstract syntax tree of a file, a `SemanticModel` object that represents 
+how a single `SyntaxTree` is connected to others, and a `DiagnosticAnalyzer` 
+interface. The `SyntaxTree` and `SemanticModel` both have a rich interface 
+for querying their data and getting the semantic information from the code. 
+This rich set of APIs lowers the bar for developers that want to analyze the 
+semantics of their code, this is why Roslyn provides the 
+`DiagnosticAnalyzer` abstract class. It provides callbacks that can be used 
+in order to easily implement some custom logic that can report `Diagnostic` 
+messages back to Roslyn. When this analyzer is installed it is integrated 
+into the Roslyn pipeline and any `Diagnostic` messages are shown alongside 
+compiler generated messages. These analyzers are commonly packaged as NuGet 
+packages and installed to projects much like other software dependencies can 
+be installed. Additionally, the diagnostics are tied to the project 
+therefore only one developer needs to install an analyzer for all the 
+projects developers to start receiving messages.
 
 \subsection{Project Purpose and Goals}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+
+The solution to handling the problems of text based diff is to use 
+semantics. This tool could be created with the ability to locate 
+false-negatives and false-positives, fix the conflicts, and automatically 
+merge the resulting changes. Fixing the resulting conflicts in an automated 
+manner represents an extremely challenging task and is beyond the scope of 
+this project.
+
+Additionally, the benefits of text-based merging outweigh the drawbacks. 
+Text-based diffs and merges are fast, dependable, and already exist in every 
+major version control system. The drawbacks can also be offset by time spent 
+resolving the merge conflicts by hand and building comprehensive test suites 
+to detect false-positives. However, software projects tend to be short on 
+time and developers are expensive resources Not enough time is devoted to 
+test suites and managing merge conflicts takes up valuable time.
+
+The goal of SemDiff is not resolving merge conflicts, but preventing 
+false-negatives and false-positives before they happen by warning developers 
+when changes are detected that could cause a merge conflict. SemDiff takes 
+the important first step of being able to locate and identify the situations 
+that create false-positive and false-negative merge conflicts. Both of the 
+narratives in the background section could have been prevented if the 
+developer had been warned that someone else was working in an area that 
+could cause problems. If Adam had known that Bob had moved the method, he 
+might have moved the method in his also. If Bob had known that Adam edited 
+the method, he might not have moved it. Similarly, if Ross had known about 
+Smith’s changes to the `Logger`, he would have implemented the `LogAll` 
+method. Preventing these kinds of issues helps developers focus on code.
 
 
 
@@ -168,12 +302,38 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fri
 \subsection{Overall Progress}
 
 \subsubsection{Fall Term}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
 
-\subsubsection{Winter Term (Mid)}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+Planning for SemDiff was completed during Oregon State University’s 2015 
+fall term. The team met with Phillip Carter almost every weekend to talk 
+about the project. The team decided upon splitting up the project into four 
+major parts, handling GitHub interaction, false-positive detection, 
+false-negative detection, and error message generation. By the end of the 
+term, the team had refined a requirement document and a design document. The 
+requirement document is referenced in this report structure because it is 
+the main standard that has guided development.
 
-\subsubsection{Winter Term (Final)}
+\subsubsection{Winter Term}
+
+Coding began during Oregon State University’s 2016 winter term. All four 
+components are functional, although there are still unresolved bugs. 
+
+The team met with Phillip only once this term, on February 6th. Phillip and 
+the design team agreed this was best unless the team runs into problems with 
+Roslyn or has to communicate problems about the project. The meeting this 
+term was more of a check-in than a discussion of what to do or where to go. 
+While there has only been one meeting, the team has kept in contact with 
+Phillip and Phillip has left feedback on pull requests and through email.
+
+The team met weekly on Mondays to do a code review of any pull requests that 
+have been submitted as well as hash out any questions or concerns a member 
+has moving forward. The team’s communication outside of the meeting time has 
+also been good and all the members have been on the same page, leaving few 
+miscommunications and problems.
+
+At beginning of next term the team is planning a meeting with Phillip to 
+demonstrate the project and to insure that the developers are continuing in 
+the right direction.
+
 
 
 
@@ -185,7 +345,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fri
 
 
 \section{Project Progress}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+The following sections detail the progress on all of the requirements. For 
+example, section 2.1 refers to requirement 1 in the requirements document. 
+The title of each section is a summary; the full requirement is written at 
+the beginning of each section.
 
 
 
@@ -198,17 +361,196 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fri
 
 \begin{quote}
 
-SemDiff will query the GitHub repo cloned in VS for pull request and the files changed.
+SemDiff will query the GitHub repo cloned in VS for pull request and the 
+files changed.
 
 \end{quote}
 
 \subsubsection{Progress}
 
+SemDiff successfully queries GitHub and downloads all pull requests. The 
+project keeps a list of pull requests and associated files, which are stored 
+locally. SemDiff implements the ability to use OAuth to increase the number 
+of API calls per hour from 60 to 5000. This is important because of the fact 
+that each time SemDiff checks for pull requests, it has to check to see if 
+there are any pull requests and then make another call for each pull request 
+found.
+
+To reduce the number of calls to GitHub, the project checks to see if the 
+pull requests have been updated on GitHub before downloading the files. This 
+is done through the use of HTTP header files in conjunction with GitHub’s 
+header responses. GitHub sends an `ETag` when responding with a list of pull 
+requests. When the local cache of pull requests needs updating, the `ETag` 
+is placed in the `If-None-Match` header of the request. If the pull request 
+list has changed then a new `ETag` is received, otherwise the server 
+responds with an HTTP status code of 304 (not modified) indicating that the 
+current data is still accurate. This reduces the number of API calls and 
+improves performance by reducing the amount of data sent between SemDiff and 
+GitHub. To improve efficiency and reduce the bandwidth and file writing 
+overhead, each pull request only downloads its files if they have been 
+updated from the previous time they were downloaded.
+
 \subsubsection{Methodology}
+
+In order to query and parse GitHub’s API, SemDiff uses `Newtonsoft.Json` 
+along with the `HttpClient` library provided by Microsoft. `Newtonsoft.Json` 
+provides JSON parsing, allowing SemDiff to have a function that handles all 
+the JSON with two lines of code. The actual function is slightly longer in 
+order to handle API errors and therefore also uses a try catch block. This 
+function is shown in Figure~\ref{deserializeNewtonsoft}. Each call to an API 
+requires a class that reflects the data contained in the JSON. The call for 
+getting pull requests uses the class shown in Figure~\ref{PullRequestCode} 
+for example. In Figure~\ref{PullRequestCode}, the `User` class is simply a 
+class that holds a string that is the username because it nested in the 
+JSON. The internal function allows SemDiff to filter out unwanted files from 
+the pull request.
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+private static T DeserializeWithErrorHandling<T>(string content)
+{
+try
+        	{
+            		return JsonConvert.DeserializeObject<T>(content);
+        	}
+        	catch (Exception ex)
+        	{
+            		Logger.Error($"{nameof(GitHubDeserializationException)}: {ex.Message}");
+            		throw new GitHubDeserializationException(ex);
+        	}
+}
+\end{lstlisting}
+\caption{Deserialization with Newtonsoft.Json}
+\label{deserializeNewtonsoft}
+\end{figure}
+
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+public class PullRequest
+{
+ 	public int Number { get; set; }
+public string State { get; set; }
+public string Title { get; set; }
+public bool Locked { get; set; }
+[JsonProperty("updated_at")]
+public DateTime Updated { get; set; }
+public DateTime LastWrite { get; set; } = DateTime.MinValue;
+[JsonProperty("html_url")]
+public string Url { get; set; }
+public User User { get; set; }
+public HeadBase Head { get; set; }
+public HeadBase Base { get; set; }
+public IList<Files> Files { get; set; }
+internal RemoteChanges ToRemoteChanges(string repofolder)
+{
+return new RemoteChanges
+{
+Date = Updated,
+Title = Title,
+Url = Url,
+Files = Files
+.Where(f => f.Status == GitHub.Files.StatusEnum.Modified || f.Status == GitHub.Files.StatusEnum.Changed)
+.Where(f => f.Filename.Split('.').Last() == "cs")
+.Select(f => f.ToRemoteFile(repofolder, Number))
+.ToList(),
+};
+}
+}
+\end{lstlisting}
+\caption{C\# Representation of Pull Request’s JSON data structure}
+\label{PullRequestCode}
+\end{figure}
+
+The `IList` of `Files` in Figure~\ref{PullRequestCode} is not setup on the 
+initial parsing because the files are not retrieved with the list of pull 
+requests. Once the list of pull requests has been retrieved from GitHub, an 
+API call is made for each of the open pull requests that were found. The 
+same function, `HttpGetAsync<T>(string url)`, is called, but this time 
+SemDiff passes in a different custom class as the type, shown in 
+Figure~\ref{GitHubFiles}.
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+public class Files
+{
+public string Filename { get; set; }
+[JsonConverter(typeof(StringEnumConverter))]
+public StatusEnum Status { get; set; }
+internal RemoteFile ToRemoteFile(string repofolder, int num)	
+{
+var baseP = GetPathInCache(repofolder, num, Filename, isAncestor: true);
+var fileP = GetPathInCache(repofolder, num, Filename, isAncestor: false);
+return new RemoteFile
+{
+Filename = Filename,
+Base = CSharpSyntaxTree.ParseText(File.ReadAllText(baseP), path: baseP),
+File = CSharpSyntaxTree.ParseText(File.ReadAllText(fileP), path: fileP)
+};
+        	}
+}
+\end{lstlisting}
+\caption{C\# Representation of File's JSON data structure}
+\label{GitHubFiles}
+\end{figure}
+
+These files need to be downloaded. To do this, SemDiff uses two methods. The 
+first method, `DownloadFilesAsync()`,checks and sees if the files need to be 
+updated. If they need to be updated, the method iterates through the files 
+of a pull request, checks if they are a modified C\# file and then calls 
+`DownloadFileAsync()` twice (shown in Figure~\ref{DownloadFileAsync}). The 
+reason for calling `DownloadFileAsync()` twice is for SemDiff to pull down 
+both the pull request file and the common ancestor file. 
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+private async Task DownloadFileAsync(int prNum, string path, string sha, bool isAncestor = false)
+{
+var rawText = await HttpGetAsync($@"https://github.com/{RepoOwner}/{RepoName}/raw/{sha}/{path}");
+path = path.Replace('/', Path.DirectorySeparatorChar);
+var dir = GetPathInCache(RepoFolder, prNum, path, isAncestor);
+new FileInfo(dir).Directory.Create();
+File.WriteAllText(dir, rawText);
+}
+\end{lstlisting}
+\caption{DownloadFileAsync Function}
+\label{DownloadFileAsync}
+\end{figure}
+
+The RepoFolder is a path to AppData with some more details encoded in the 
+path to allow multiple projects. For instance, the repo 
+`\url{github.com/semdiffdotnet/curly-broccoli.git}` has an issue number 1 
+that could be stored at `\url{C:\\Users\[Username]\AppData\Roaming\SemDiff\semdiffdotnet\curly-broccoli\1}` 
+on the local disk. The line, `new FileInfo(dir).Directory.Create();`, 
+is there to make sure that the directory is created, otherwise the next line 
+with throw an error.
 
 \subsubsection{Future Work}
 
+This section is in working order, but for portability, the file IO needs to 
+be abstracted. The number of file IO calls will also be reduced. For 
+example, `Directory.Create()` is called more often than necessary.
+
 \subsubsection{Problems}
+
+This is the hardest part of the system to test, but also the most critical. 
+SemDiff will need to a more advanced test suite to effectively test how the 
+software will handle pull requests changing.
+
+Additionally, the GitHub API documentation fairly comprehensive, but is 
+missing a few things that could be convenient. For instance, there is no 
+single list of all the error codes that the API can produce, rather, errors 
+are only documented next to the documentation for endpoints. This makes it 
+hard for the program to be sure that it is handling all the errors that 
+could occur in production.
+
+Another example of missing documentation is the lack of field specific 
+documentation. SemDiff ran into this when testing pagination on the Roslyn 
+repository and ran into a previously unencountered StatusEnum, changed. 
 
 
 
@@ -221,17 +563,128 @@ SemDiff will query the GitHub repo cloned in VS for pull request and the files c
 
 \begin{quote}
 
-SemDiff will detect changes between two version of a file that will cause a text-based merge conflict but do not change the semantics of the code. This is defined as a false-positive. This will require at least partial completion of requirement 1, because we will need to know the format/state that we will receive files.
+SemDiff will detect changes between two version of a file that will cause a 
+text-based merge conflict but do not change the semantics of the code. This 
+is defined as a false-positive. This will require at least partial 
+completion of requirement 1, because we will need to know the format/state 
+that we will receive files.
 
 \end{quote}
 
 \subsubsection{Progress}
+The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
+`Analyze` class. The logic is unchanged from the design document. The test 
+repo has been used used for testing the implementation and the results have 
+been promising. Although there were concerns earlier in the project, 
+whitespace doesn’t seem to break false positive detection. The test repo has 
+large xml comment blocks at the top of methods that are moved with the 
+methods and spaces in between the methods, but the changes were still 
+recognized as a false-positive condition.
+
+\begin{figure}[!t]
+\centering
+\begin{enumerate}
+\item Do Diff3 on syntax trees
+\item Get a conflict out
+\item Check that the conflict has a side that is a method
+\item Get original method
+\item Check that it has been removed on the other side
+\item Get changed method
+\item Search through other changes to find the added method (move destination)
+\item Diff3 the inside of the original, changed and moved
+\item If there are no conflicts a false positive has occurred
+\end{enumerate}
+\caption{High level overview of how false-positives are detected}
+\label{fpalgore}
+\end{figure}
 
 \subsubsection{Methodology}
+The `ForFalsePositive` method shown in Figure~\ref{anforfp} is the 
+implementation for the algorithm shown in Figure~\ref{fpalgore}. This 
+section will break the method into more manageable sections and explain them.
+
+The purpose of first part of method (lines 4-14) gets the remaining 
+`SyntaxTree`s from the pull requests to run the `Diff3.Compare` on line 16. 
+The statement on line 19 and 20 gets all the ones that are contained in 
+method (step 3 of the algorithm) and enumerates them in an `foreach` loop. 
+The statement on line 22 gets the original method and the 
+`GetInnerMethodConflicts` helper method looks in the list inserted methods 
+populated on line 17 and retrieves the matching function that was inserted. 
+The helper function uses that information to do do a `Diff3.Compare` on the 
+inside of the methods and returns the result. The conflicting changes are 
+filtered out on line 32 (step 9). The remaining are false-positives and are 
+returned.
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+public static IEnumerable<DetectedFalsePositive> ForFalsePositive(Repo repo,
+                                              SyntaxTree tree, string filePath)
+{
+    var relativePath = GetRelativePath(repo.LocalDirectory, filePath)
+                                                           .Replace('\\', '/');
+    if (string.IsNullOrWhiteSpace(relativePath))
+    {
+        yield break;
+    }
+    var pulls = GetPulls(repo, relativePath);
+    foreach (var fp in pulls)
+    {
+        var f = fp.Item1;
+        var p = fp.Item2;
+
+        var conflicts = Diff3.Compare(f.Base, tree, f.File);
+        var locs = GetInsertedMethods(conflicts.Local);
+        var rems = GetInsertedMethods(conflicts.Remote);
+        foreach (var c in conflicts.Conflicts
+                   .Where(con => con.Ancestor.Node is MethodDeclarationSyntax))
+        {
+            var ancestor = (MethodDeclarationSyntax)c.Ancestor.Node;
+            if (ancestor == null)
+                break;
+
+            var localRemoved = GetInnerMethodConflicts(ancestor, c.Remote, 
+                                                                c.Local, locs);
+            foreach (var t in localRemoved)
+            {
+                var diff3 = t.Item3;
+                var local = t.Item2; //local removed
+                if (!diff3.Conflicts.Any())
+                {
+                    yield return new DetectedFalsePositive
+                    {
+                        RemoteFile = f,
+                        RemoteChange = p,
+                    }; //... Some properties removed for brevity
+                }
+            }
+            ... //Omited for brevity, remaining code mirrors lines 26-40
+        }
+    }
+}
+\end{lstlisting}
+\caption{The ForFalsePositive method handles false positive detection}
+\label{anforfp}
+\end{figure}
 
 \subsubsection{Future Work}
 
+Currently the `ForFalsePositive` method shown in Figure~\ref{anforfn} has 
+about 20 lines of nearly identical code that is repeated (the repetitive 
+lines have been omitted in the figure). The subtle difference in 
+functionality between the two makes it challenging to combine the 
+functionality together. In the future this will be refactored to remove the 
+repetitive block.
+
 \subsubsection{Problems}
+
+Currently there are problems with differing line endings (LF: `\n` vs CRLF: 
+`\r\n`). When files are downloaded from GitHub they may have different line 
+endings than the versions cloned locally. When the files are processed by 
+`Diff` it is interpreted as adding (or removing) a character on each line. 
+Although this isn’t directly a bug with the function shown in 
+Figure~\ref{anforfp}, this makes determining false-positives impossible 
+because extra lines are included in the conflicts.
 
 
 
@@ -244,15 +697,144 @@ SemDiff will detect changes between two version of a file that will cause a text
 
 \begin{quote}
 
-SemDiff will detect if the underlying methods used by another method have been semantically changed given a set of files that have been changed by another developer. This is defined as a false-negative). This will require at least partial completion of requirement 1, because we will need to know the format/state that we will receive files.
+SemDiff will detect if the underlying methods used by another method have 
+been semantically changed given a set of files that have been changed by 
+another developer. This is defined as a false-negative). This will require 
+at least partial completion of requirement 1, because we will need to know 
+the format/state that we will receive files.
 
 \end{quote}
 
 \subsubsection{Progress}
 
+False-negative detection has been implemented and successfully detects the 
+conditions set up in the test repository (the resulting warnings are shown 
+in Figure~\ref{fnerrorlist}). The basic algorithm shown in 
+Figure~\ref{fnalgore} is the same it was presented in the design document.
+
+\begin{figure}[!t]
+\centering
+\begin{enumerate}
+\item Get base class (using semantic model)
+\item Use the base class to get a file name
+\item Look up pull requests using file name
+\item If it wasn’t changed (file not in pull request) then there is no 
+false-negative else continue
+\item Do diff3 on base classes
+\item If diff3 revealed conflicts, then there is a possible false-positive 
+else there is no false positive.
+\end{enumerate}
+\caption{High level description of how false-negative detection works}
+\label{fnalgore}
+\end{figure}
+
 \subsubsection{Methodology}
 
+The `ForFalseNegative` method shown in Figure~\ref{anforfn} contains nearly 
+all of the code for detecting false-negatives. This section breaks down and 
+explores the code in manageable chunks.
+
+The first step in Figure~\ref{fnalgore} is to get the base class. This is a 
+complex process that requires several statements. The first statement from 
+lines 4-7 retrieves all nodes of the  `ClassDeclarationSytax` type from the 
+abstract syntax tree. `ClassDeclarationSyntax` is the type of the nodes in 
+Roslyn’s abstract syntax trees that creates classes. The next statement on 
+lines 9-10 uses the class declarations to get corresponding `ITypeSymbol` 
+instances. The `ITypeSymbol` is an interface that provides access to the 
+semantic information about a type. The statement on lines 12-15 uses the 
+`ITypeSymbol` interface to get the `SyntaxReference`s for the base classes. 
+After the statements on lines 17-19 are executed to retrieve the 
+`ClassDeclarationSyntax`, the base class has been successfully retrieved.
+
+The next two steps in Figure~\ref{fnalgore} is to get the file name from the 
+base class and use it to lookup the pull requests using the file name. 
+Foreach base class the name is retrieved on lines 23-25 and is then passed 
+into `GetPulls` on line 27. If the file was not found in the changed files 
+for the repo then an empty `IEnumerable` will be implicitly returned, 
+otherwise the inner function will be evaluated.
+
+The last steps of the algorithm in Figure~\ref{fnalgore} is to run `Diff3` 
+on the components and see if there are conflicts within. Lines 29-40 merely 
+prepare for the diff by getting the class declaration from the version in 
+the pull request. Line 42 uses a `MergeClassDeclarationSyntaxes` helper 
+function to match all the declaration together (for example if there are two 
+class declarations in a file they need to be matched up between all three 
+versions of the file). After the class declarations are matched the they are 
+finally compared using `Diff3` on line 43. Classes with no conflicts are 
+filtered out on line 44, and any classes that make it to line 45 are false 
+negatives and are reported.
+
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
+                                                   SemanticModel semanticModel)
+{
+    var classDeclarations = semanticModel.SyntaxTree
+                                .GetRoot()
+                                .DescendantNodes()
+                                .OfType<ClassDeclarationSyntax>();
+
+    var declaredSymbol = classDeclarations.Select(cds => 
+	                                     semanticModel.GetDeclaredSymbol(cds));
+
+    var classBases = declaredSymbol.SelectMany(
+            t => (t as INamedTypeSymbol)?.BaseType
+                            ?.DeclaringSyntaxReferences 
+							?? Enumerable.Empty<SyntaxReference>());
+
+    var classBaseNodes = Task.WhenAll(classBases
+	                                 .Select(sr => sr.GetSyntaxAsync()))
+                           .Result.OfType<ClassDeclarationSyntax>();
+
+    return classBaseNodes.SelectMany(c =>
+    {
+        var relativePath = GetRelativePath(repo.LocalDirectory, 
+		                                                 c.SyntaxTree.FilePath)
+                                    .Replace('\\', '/'); //Fix Dir Separator!
+
+        return GetPulls(repo, relativePath).SelectMany(t =>
+        {
+            var file = t.Item1;
+            var remotechanges = t.Item2;
+
+            var ancestorDecs = file.Base
+                                    .GetRoot()
+                                    .DescendantNodes()
+                                    .OfType<ClassDeclarationSyntax>();
+
+            var remoteDecs = file.File
+                                    .GetRoot()
+                                    .DescendantNodes()
+                                    .OfType<ClassDeclarationSyntax>();
+
+            return MergeClassDeclarationSyntaxes(ancestorDecs, remoteDecs)
+                    .Select(ar => Diff3.Compare(ar.Item1, c, ar.Item2))
+                    .Where(dr => dr.Conflicts.Any())
+                    .Select(dr => new DetectedFalseNegative
+                    {
+                        Location = Location.None,
+                        RemoteChange = remotechanges,
+                        RemoteFile = file,
+                        TypeName = c.Identifier.ToString(),
+                    });
+        });
+    });
+}
+\end{lstlisting}
+\caption{The `ForFalseNegative` method handles false negative detection}
+\label{anforfn}
+\end{figure}
+
 \subsubsection{Future Work}
+
+Currently nearly all the code for detecting false-negatives is contained 
+within one large method shown in Figure~\ref{anforfn}, but this is a bad code 
+smell. In the future this code will be reinforced with more unit tests and 
+then refactored with thought to the ‘separation of concerns’ principle and 
+the KISS principle. By aggressively refactoring the code, it will become more 
+readable and it will be easier to explain.
 
 \subsubsection{Problems}
 
@@ -267,7 +849,10 @@ SemDiff will detect if the underlying methods used by another method have been s
 
 \begin{quote}
 
-At compile time, SemDiff will display a warning in the “Error List” when a false-positive occurs between local files and remote files retrieved from a pull request. This will require requirements 1 and 2 because the files and the functionality to compare will be needed.
+At compile time, SemDiff will display a warning in the “Error List” when a 
+false-positive occurs between local files and remote files retrieved from a 
+pull request. This will require requirements 1 and 2 because the files and 
+the functionality to compare will be needed.
 
 We will show that a false-positive was detected.
 
@@ -279,11 +864,45 @@ We will provide a link to the pull request.
 
 \subsubsection{Progress}
 
-\subsubsection{Methodology}
+The false positive warnings are being displayed as intended. The format of 
+warnings is `"False-Positive between '<<Name Of File>>' and '(<<Title of Pull 
+Request>>)[<<Link to Github>>]'"`. An example of a warning is shown in 
+Figure~\ref{fperrorlist}. This warning was created by cloning the test repo 
+and checking out the “A” side (a similar message would be shown if “B” was 
+checked out). The location is also reported for false-positives, allowing 
+Visual Studio to provide squiggles and hover over messages as shown in 
+Figure~\ref{fphoverover}.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{FalsePositiveErrorList}
+
+\caption{Visual Studio’s error list showing a false-positive reported in the 
+test repo}
+\label{fperrorlist}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{FalsePositiveHoverOver}
+
+\caption{False positives support warnings with squiggles and hover over 
+messages. This shows that the changes to `Function12` could cause a 
+false-positive}
+\label{fphoverover}
+\end{figure}
 
 \subsubsection{Future Work}
 
-\subsubsection{Problems}
+The false positive warnings are currently in working order, however there are 
+a few ways that they can be improved. Figure~\ref{fphoverover} shows 
+underlines over the entire function. With larger functions that will be 
+obnoxious. Instead the underline should be be placed under the identifier 
+only. The current message format also doesn’t specify whether the the current 
+message was moved locally or remotely. An improvement would be displaying 
+something like “method has been moved, but was edited in a pull request” or 
+“edited method was moved in a pull request.”
+
 
 
 
@@ -296,7 +915,11 @@ We will provide a link to the pull request.
 
 \begin{quote}
 
-SemDiff will display a warning in the “Error List” (at compile time) when a false-negative occurs between the semantics of the classes represented by the local files and the classes represented by the remote files retrieved from a pull request. This will require requirements 1 and 3 because the files and functionality to semantically diff will be needed.
+SemDiff will display a warning in the “Error List” (at compile time) when a 
+false-negative occurs between the semantics of the classes represented by 
+the local files and the classes represented by the remote files retrieved 
+from a pull request. This will require requirements 1 and 3 because the 
+files and functionality to semantically diff will be needed.
 
 We will show that a false-negative was detected.
 
@@ -310,12 +933,27 @@ We will provide a link to the pull request.
 
 \subsubsection{Progress}
 
-\subsubsection{Methodology}
+The false negative warnings are being displayed as intended. The format of 
+warnings is `"False-Negatives for type '<<Type Name (Base Class)>>' between 
+'(<<Title of Pull Request>>)[<<Link to Github>>]'"`. An example of the 
+warning is shown in Figure~\ref{fnerrorlist}. That error was collected by 
+cloning the test repo and checking out the branch that creates a derived class.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{FalseNegativeErrorList}
+
+\caption{Visual Studio’s error list showing two false-negatives reported in 
+the test repo}
+\label{fnerrorlist}
+\end{figure}
 
 \subsubsection{Future Work}
 
-\subsubsection{Problems}
-
+Unlike the false positives messages, false negative messages don’t currently 
+report a location. This prevents hover over errors from being created. Before 
+final release the team will need to decide where to report as the location 
+(derived class or base class) and implement reporting the location.
 
 
 
@@ -327,18 +965,51 @@ We will provide a link to the pull request.
 
 \begin{quote}
 
-SemDiff will provide a NuGet package that can be installed to a VS project as an Analyzer.
+SemDiff will provide a NuGet package that can be installed to a VS project 
+as an Analyzer.
 
 \end{quote}
 
 \subsubsection{Progress}
 
-\subsubsection{Methodology}
+The project currently produces a NuGet package. Figures \ref{pacmansmall} and 
+\ref{pacman} shows how the package appears in the NuGet package manager. The 
+package is currently available in the NuGet Gallery and can be installed with 
+`Install-Package SemDiff -Pre`. The package can also be viewed at 
+\url{https://www.nuget.org/packages/SemDiff}. That page contains interesting 
+information including the number of times the package has been downloaded.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{SemDiffInPackageManagerSmall}
+
+\caption{This is how the SemDiff package is displayed in the NuGet package 
+manager}
+\label{pacmansmall}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{SemDiffInPackageManager}
+
+\caption{After the package is selected, this larger window is displayed in 
+the NuGet package manager}
+\label{pacman}
+\end{figure}
 
 \subsubsection{Future Work}
 
+The package could be improved by providing an icon for the package, 
+replacing the blue icon with white dots. After the package is installed, the 
+dependencies show up in the analyzer section of the solution explorer. This 
+isn’t a bug, but does affect the user experience.
+
 \subsubsection{Problems}
 
+Learning the nuspec configuration format was a significant barrier for this 
+requirement. Few people have documented building a NuGet package for Roslyn 
+Analyzers in particular. Analyzers are very different from most packages and 
+require a different method for building the NuGet package. 
 
 
 
@@ -356,12 +1027,28 @@ SemDiff will minimally impact VS performance.
 
 \subsubsection{Progress}
 
-\subsubsection{Methodology}
-
-\subsubsection{Future Work}
+Async functions were implemented in the request logic to improve the time to 
+retrieve data from GitHub, however little performance tuning has been done. 
+The table on the SemDiff wiki (on the ‘Performance’ page seen in 
+Figure~\ref{wikilist}) will be filled with comparison times for compilation 
+with and without SemDiff. 
 
 \subsubsection{Problems}
 
+Initially, the plan was to time the compilation inside of Visual Studio, 
+however after more of the project was completed it was discovered that 
+Visual Studio actually compiles the solution and then, after compilation is 
+complete, it runs any code analysis in the background. Although performance 
+of SemDiff is still a high priority, Visual Studio already makes sure that 
+analyzers cannot affect performance or compile time. Another side effect of 
+this discovery is that SemDiff can no longer time compilation inside of 
+Visual Studio because there is no way to determine when it finishes running.
+ 
+There are at least two potential solutions to this problem. The team has not 
+yet determined the best solution. One option is to add code into the project 
+that uses the built in `Stopwatch` to time how much time SemDiff adds to 
+compilation. Another option is to use the Visual Studio command line 
+(`devenv.exe`) to compile with and without the SemDiff package installed.
 
 
 
@@ -377,13 +1064,14 @@ Alerts will be informative
 
 \end{quote}
 
-\subsubsection{Progress}
+This requirement was added to enhance requirements 4 and 5 by putting 
+emphasis on the importance of understandable alerts and making sure the user 
+has a good experience. This is extremely important because alerts are the 
+only way that SemDiff communicates with the user. Therefore, alerts must 
+contain all the information required to understand why an alert was 
+triggered without being cryptic. SemDiff’s alerts are currently informative, 
+but will continue to evolve.
 
-\subsubsection{Methodology}
-
-\subsubsection{Future Work}
-
-\subsubsection{Problems}
 
 
 
@@ -396,18 +1084,51 @@ Alerts will be informative
 
 \begin{quote}
 
-All source code, documentation, and issue tracking should be hosted publicly on GitHub. The GitHub wiki shall contain documentation for the project including a Getting Started guide, an API Guide with code examples, and motivational purpose of the project.
+All source code, documentation, and issue tracking should be hosted publicly 
+on GitHub. The GitHub wiki shall contain documentation for the project 
+including a Getting Started guide, an API Guide with code examples, and 
+motivational purpose of the project.
 
 \end{quote}
 
 \subsubsection{Progress}
 
-\subsubsection{Methodology}
+The project source code is hosted on GitHub, and the team has also used the 
+issue tracking, pull requests, and milestone features built into GitHub. 
+Currently there are /ref{TODO} milestones, /ref{TODO} open issues, 
+/ref{TODO} closed issues, and /ref{TODO} closed pull requests. The wiki is 
+setup, but many pages remain incomplete. Figure~\ref{wikilist} shows the 
+pages that are currently created.
+
+\begin{figure}[!t]
+tho\centering
+\includegraphics[width=\textwidth]{WikiList}
+
+\caption{List of all pages captured from the wiki}
+\label{wikilist}
+\end{figure}
 
 \subsubsection{Future Work}
 
+To complete this requirement, a lot more content needs to be added to the 
+wiki, including an API Guide and code examples that detail the parts of the 
+application. The Getting Started Guide will need to be filled with simple 
+yet important information. A performance section that details how SemDiff 
+affects the speed of compilation requires tests to be run and that 
+information must be added to the page. In the future there will be an API 
+Guide using the XML documentation inside of the source code.
+
 \subsubsection{Problems}
 
+The team had some difficulty in week 1 and 2 with Shawn not being able to 
+commit to GitHub or make new issues, however that was resolved before it 
+impacted productivity. There was also had some difficulty with using Git. 
+The Git plugin for Visual Studio has some usability problems. This led to 
+some code being pushed directly to the master branch. To resolve the issue 
+(and submit the pull request with peer review), the team had to learn how to 
+revert commits and revert merge commits. Before things were figured out a 
+long string of revert commits were left behind. Since the problem was 
+resolved, things have worked more smoothly.
 
 
 
@@ -419,10 +1140,27 @@ All source code, documentation, and issue tracking should be hosted publicly on 
 
 \begin{quote}
 
-All outputs of the project should be open source and licensed with the MIT license.
+All outputs of the project should be open source and licensed with the MIT 
+license.
 
 \end{quote}
 
+A copy of the MIT license is available at the root of the GitHub repo and 
+the final package includes a link to the MIT license. In the future, a 
+comment will be added to the top each file. This is not strictly required by 
+the MIT license (unlike the GPLv3), but is still considered a best practice. 
+The line that will be added is shown in Figure~\ref{mitheader}. That line 
+was inspired by a similar line that appears in the Roslyn source code.
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+// Copyright (c) 2015 semdiffdotnet. Distributed under the MIT License. See LICENSE file or opensource.org/licenses/MIT.
+\end{lstlisting}
+\caption{License Preamble that will be added to the top of all developer 
+produced code}
+\label{mitheader}
+\end{figure} 
 
 
 
@@ -434,17 +1172,19 @@ All outputs of the project should be open source and licensed with the MIT licen
 
 \begin{quote}
 
-Source code will contain header comments on public classes, public interfaces, and public methods. Methods will only contain comments that help explain the function of obscure code.
+Source code will contain header comments on public classes, public 
+interfaces, and public methods. Methods will only contain comments that help 
+explain the function of obscure code.
 
 \end{quote}
 
-\subsubsection{Progress}
+Source code will contain header comments on public classes, public 
+interfaces, and public methods. Methods will only contain comments that help 
+explain the function of obscure code.
 
-\subsubsection{Methodology}
-
-\subsubsection{Future Work}
-
-\subsubsection{Problems}
+The public items have good descriptions using the xml documentation, and 
+there are no redundant comments inside the methods. Any methods added in the 
+future will also have full xml comments.
 
 
 
@@ -461,16 +1201,148 @@ SemDiff will be built using C\# and the Roslyn API.
 
 \end{quote}
 
-\subsubsection{Progress}
-
-\subsubsection{Methodology}
-
-\subsubsection{Future Work}
-
-\subsubsection{Problems}
-
+SemDiff is implemented in C\# and uses the Roslyn APIs to compare syntax 
+trees. Roslyn is used in multiple places, the most interesting uses of 
+Roslyn include the `Diff` object where Roslyn’s `GetChanges` method, shown 
+in Figure~\ref{diffcompare}, is used. Another interesting example is the 
+`ForFalseNegative` function, shown in Figure~\ref{analysisforfalsenegative}, 
+that uses the `SemanticModel` to find the base class of the current file.
 
 
+
+
+
+
+
+
+
+
+\section{Code Walkthrough}
+
+The purpose of this section is to explain parts of SemDiff that are not 
+directly written into the requirements document. While not fulfilling a 
+requirement, these are integral parts of the project.
+
+\subsubsection{Diff and Diff3}
+
+Determining the differences between text is a critical part of the system 
+because it is used detecting both False-Positives and False-Negatives. The 
+Diff3 module reflects the way that Git performs merges. The de facto merge 
+algorithm is called `diff3` and has a corresponding `diff3` Unix utility. 
+
+\begin{figure}[!t]
+\centering
+\begin{enumerate}
+\item lchanges <- Diff Local Branch and Ancestor
+\item rchanges <- Diff Remote Branch and Ancestor
+\item find conflicts with lchanges and rchanges
+\end{enumerate}
+\caption{Basic summary of the diff3 algorithm}
+\label{diff3algorithm}
+\end{figure}
+
+The Diff3 algorithm, as shown in Figure~\ref{diff3algorithm}, delegates to 
+the Diff routine. Most of Diff’s work is done by Roslyn. 
+Figure~\ref{diffcompare} shows the wrapper for that function. The reason 
+that the wrapper exists is that the Roslyn function provides its output in 
+an inconvenient format. It improves on the output from the `GetChanges` 
+function by looking up the corresponding span in the changed branch, so that 
+SemDiff can get the text out if it need to and compare the spans latter. 
+This is complicated by the fact that the changes can change how the ancestor 
+and changed file are related, that is what the offset variable keeps track 
+of. The Diff3 implementation shown in Figure~\ref{diff3compare} shows how 
+the Diff component is used. The `GetConflicts` helper function shown in 
+Figure~\ref{diff3getconflicts} finds diff spans that overlap and includes 
+all the changes involved in a conflict object.
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+public static IEnumerable<Diff> Compare(SyntaxTree ancestor, SyntaxTree changed)
+{
+    var offset = 0; //Tracks differences in indexes moving through the changed syntax tree
+    foreach (var change in changed.GetChanges(ancestor))
+    { //Assumes that this list is sorted by place in file
+        var origLength = change.Span.Length;
+        var offsetChange = (change.NewText.Length - origLength);
+
+        var chanStart = change.Span.Start + offset;
+        var chanLength = origLength + offsetChange;
+
+        offset += offsetChange;
+
+        var d = new Diff
+        {
+            Ancestor = SpanDetails.Create(change.Span, ancestor),
+            Changed = SpanDetails.Create(new TextSpan(chanStart, chanLength), changed)
+        };
+
+        yield return d;
+    }
+}
+\end{lstlisting}
+\caption{The `Compare` function in the `Diff` class wraps the `GetChanges` 
+function provided by Rosyn}
+\label{diffcompare}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+        public static Diff3Result Compare(SyntaxTree ancestor, SyntaxTree local, SyntaxTree remote)
+        {
+            var localChanges = Diff.Compare(ancestor, local).ToList();
+            var remoteChanges = Diff.Compare(ancestor, remote).ToList();
+
+            return new Diff3Result
+            {
+                Conflicts = GetConflicts(localChanges, remoteChanges, ancestor, local, remote),
+                Local = localChanges,
+                Remote = remoteChanges,
+                AncestorTree = ancestor,
+                LocalTree = local,
+                RemoteTree = remote,
+            };
+        }
+\end{lstlisting}
+\caption{The `Compare` function in the `Diff3`class delegates to the `Diff` class and then returns a special result object}
+\label{diff3compare}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\begin{lstlisting}
+private static IEnumerable<Conflict> GetConflicts(IEnumerable<Diff> local, IEnumerable<Diff> remote, 
+    SyntaxTree ancestorTree, SyntaxTree localTree, SyntaxTree remoteTree)
+{
+    var localChanges = local.Select(DiffWithOrigin.Local).ToList();
+    var remoteChanges = remote.Select(DiffWithOrigin.Remote).ToList();
+
+    var changes = Extensions.GetMergedChangeQueue(localChanges, remoteChanges, 
+                                                    d => d.Diff.Ancestor.Span.Start);
+    var potentialConflict = new List<DiffWithOrigin>();
+    while (changes.Count > 0)
+    {
+        potentialConflict.Clear();
+        do
+        {
+            var change = changes.Dequeue();
+            potentialConflict.Add(change);
+        }
+        while (changes.Count > 0 
+              && Diff.IntersectsAny(changes.Peek().Diff, 
+                                           potentialConflict.Select(dwo => dwo.Diff)));
+
+        if (potentialConflict.Count >= 2)
+            yield return Conflict.Create(potentialConflict, ancestorTree, localTree, remoteTree);
+    }
+    yield break;
+}
+\end{lstlisting}
+\caption{The `GetConflicts` function in the `Diff3`class finds differing 
+spans that conflict. For each conflict found a `Conflict` object is returned}
+\label{diff3getconflicts}
+\end{figure}
 
 
 
@@ -480,7 +1352,10 @@ SemDiff will be built using C\# and the Roslyn API.
 
 \section{Conclusion}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fringilla et quam sit amet, pellentesque pulvinar leo. Curabitur venenatis, augue sed volutpat sodales, risus ante facilisis mauris, a dictum dui est non quam. Praesent eu tempus justo. Sed vitae urna ultricies, semper urna at, pharetra augue. Etiam pulvinar pharetra leo, sit amet mollis diam lacinia ac. Fusce vitae volutpat neque. Nam mi nulla, luctus eget vehicula sed, scelerisque nec sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in arcu eros. Suspendisse convallis nibh nec sapien nullam.
+From the above information it is clear that SemDiff is a beta level product. 
+There is a significant amount of testing and documentation to be done, but 
+the project will be ready and satisfy the requirements by Expo.
+
 
 
 
@@ -492,35 +1367,59 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris felis lacus, fri
 
 
 \section{Glossary}
+                               %The label width should be the longest term
+\begin{description}[\IEEEsetlabelwidth{NuGet Package:}\IEEEusemathlabelsep]
 
-\begin{description}[\IEEEsetlabelwidth{NuGet Package:}\IEEEusemathlabelsep] %The label width should be the longest term
+\item[.NET:] Framework that provides the runtime and core libraries for C\# 
+and other languages
 
-\item[.NET:] Framework that provides the runtime and core libraries for C\# and other languages
+\item[AST:] Abstract Syntax Tree is a parsed data structure that represents 
+all of the tokens in source code.
 
-\item[AST:] Abstract Syntax Tree is a parsed data structure that represents all of the tokens in source code.
-
-\item[C\#:] Refers to C\# 6.0. Programming language that we are targeting. See https://goo.gl/y6A13i.
+\item[C\#:] Refers to C\# 6.0. Programming language that we are targeting. 
+See https://goo.gl/y6A13i.
 
 \item[Diff:] Tool that compares two versions of code to look for changes.
 
-\item[False-Positive:] Error that occurs when one developer writes code that calls a function and creates a pull request while another developer creates a semantic change in the function that the previous developer depends on. This can change the actual functionality to differ from what is expected by the first developer even though the changes may merge (using text based tools) without warning. This can create subtle runtime bugs that can be difficult to detect. A false-positive is not caught by text-based diff software.
+\item[False-Positive:] Error that occurs when one developer writes code that 
+calls a function and creates a pull request while another developer creates 
+a semantic change in the function that the previous developer depends on. 
+This can change the actual functionality to differ from what is expected by 
+the first developer even though the changes may merge (using text based 
+tools) without warning. This can create subtle runtime bugs that can be 
+difficult to detect. A false-positive is not caught by text-based diff 
+software.
 
-\item[False-Negative:] Errors that occur when one developer makes a non-semantic change (i.e., moves a function) and another makes a semantic change that conflicts (i.e., edits the contents of the function). When the pull request is merged (using text based tools), it will result in conflict even though semantic changes were only created by the latter developer.
+\item[False-Negative:] Errors that occur when one developer makes a 
+non-semantic change (i.e., moves a function) and another makes a semantic 
+change that conflicts (i.e., edits the contents of the function). When the 
+pull request is merged (using text based tools), it will result in conflict 
+even though semantic changes were only created by the latter developer.
 
-\item[GitHub:] Website that provide version control, issue tracking, and documentation tools for software projects
+\item[GitHub:] Website that provide version control, issue tracking, and 
+documentation tools for software projects
 
-\item[KISS:] A software enginering principle and an acronym that stands for 'keep it short and simple;' the idea of KISS is to make things 'as simple as possible, no simpiler'.
+\item[KISS:] A software enginering principle and an acronym that stands for 
+'keep it short and simple;' the idea of KISS is to make things 'as simple as 
+possible, no simpiler'.
 
-\item[NuGet Package:] Open-source package manager for the Microsoft development platform. Provides the ability to produce and consume package in Visual Studio.
+\item[NuGet Package:] Open-source package manager for the Microsoft 
+development platform. Provides the ability to produce and consume package in 
+Visual Studio.
 
-\item[Roslyn:] “Roslyn provides open-source C\# and Visual Basic compilers with rich code analysis APIs. It enables building code analysis tools with the same APIs that are used by Visual Studio.” – Roslyn Readme 
+\item[Roslyn:] “Roslyn provides open-source C\# and Visual Basic compilers 
+with rich code analysis APIs. It enables building code analysis tools with 
+the same APIs that are used by Visual Studio.” – Roslyn Readme 
 
-\item[Semantics:] Semantics of a program represent the executing behavior and the meaning/purpose of what is being executed. 
+\item[Semantics:] Semantics of a program represent the executing behavior 
+and the meaning/purpose of what is being executed. 
 
-\item[VS:] Popular IDE for working with C\#, when used here it refers to Visual Studio 2015
+\item[VS:] Popular IDE for working with C\#, when used here it refers to 
+Visual Studio 2015
 
 \end{description}
 
-See \url{https://help.github.com/articles/github-glossary/} for git and GitHub related terminology
+See \url{https://help.github.com/articles/github-glossary/} for git and 
+GitHub related terminology
 
 \end{document}
