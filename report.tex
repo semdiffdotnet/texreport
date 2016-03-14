@@ -348,8 +348,7 @@ right direction.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%|
 %-----------------------------------------------------------------------------|
 
-The following sections detail the progress on all of the requirements. For 
-example, section 2.1 refers to requirement 1 in the requirements document. The 
+The following sections detail the progress on all of the requirements. The 
 title of each section is a summary; the full requirement is written at the 
 beginning of each section.
 
@@ -547,9 +546,7 @@ repository and ran into a previously unencountered StatusEnum, changed.
 
 SemDiff will detect changes between two version of a file that will cause a 
 text-based merge conflict but do not change the semantics of the code. This is 
-defined as a false-positive. This will require at least partial completion of 
-requirement 1, because SemDiff will need to know the format/state that it will 
-receive files.
+defined as a false-positive. 
 
 Specifically: Another developer moves a function, `Foo()`, in Bar.cs without 
 changing the semantics and creates a pull request, the current developer edits 
@@ -728,33 +725,6 @@ The `ForFalseNegative` method shown in Figure~\ref{anforfn} contains nearly all
 of the code for detecting false-negatives. This section breaks down and 
 explores the code in manageable chunks.
 
-Getting the base class is a complex process that requires several statements. 
-The first statement, lines 4-7, retrieves all nodes of the  
-`ClassDeclarationSyntax` type from the abstract syntax tree. The 
-`ClassDeclarationSyntax` is the type of the nodes in Roslyn’s abstract syntax 
-trees that creates classes. The next statement, lines 9-10, uses the class 
-declarations to get corresponding `ITypeSymbol` instances. The `ITypeSymbol` is 
-an interface that provides access to the semantic information about a type. The 
-statement on lines 12-15 uses the `ITypeSymbol` interface to get the 
-`SyntaxReference`s for the base classes. Lines 17-19 are executed to retrieve 
-the `ClassDeclarationSyntax`; the base class has been successfully retrieved.
-
-The next two steps are to get the file name from the base class and use it to 
-lookup the pull requests using the file name. For each base class, the name is 
-retrieved on lines 23-25 and is then passed into `GetPulls` on line 27. If the 
-file was not found in the changed files for the repo then an empty 
-`IEnumerable` will be returned, otherwise the inner function will be evaluated.
-
-The last steps of the algorithm are to run `Diff3` on the components and see if 
-there are conflicts within. Lines 29-40 merely prepare for the diff call by 
-getting the class declaration from the pull request. Line 42 uses a 
-`MergeClassDeclarationSyntaxes` helper function to match all the declaration 
-together . For example, if there are two class declarations in a file they need 
-to be matched up between all three versions of the file. Once the class 
-declarations are matched, they are finally compared using `Diff3` on line 43. 
-Classes with no conflicts are filtered out on line 44, and any classes that 
-make it to line 45 are false negatives and are reported.
-
 \begin{figure}[!htb]
 \centering
 \begin{lstlisting}
@@ -816,6 +786,33 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
 \caption{The ForFalseNegative method handles false negative detection}
 \label{anforfn}
 \end{figure}
+
+Getting the base class is a complex process that requires several statements. 
+The first statement, lines 4-7, retrieves all nodes of the  
+`ClassDeclarationSyntax` type from the abstract syntax tree. The 
+`ClassDeclarationSyntax` is the type of the nodes in Roslyn’s abstract syntax 
+trees that creates classes. The next statement, lines 9-10, uses the class 
+declarations to get corresponding `ITypeSymbol` instances. The `ITypeSymbol` is 
+an interface that provides access to the semantic information about a type. The 
+statement on lines 12-15 uses the `ITypeSymbol` interface to get the 
+`SyntaxReference`s for the base classes. Lines 17-19 are executed to retrieve 
+the `ClassDeclarationSyntax`; the base class has been successfully retrieved.
+
+The next two steps are to get the file name from the base class and use it to 
+lookup the pull requests using the file name. For each base class, the name is 
+retrieved on lines 23-25 and is then passed into `GetPulls` on line 27. If the 
+file was not found in the changed files for the repo then an empty 
+`IEnumerable` will be returned, otherwise the inner function will be evaluated.
+
+The last steps of the algorithm are to run `Diff3` on the components and see if 
+there are conflicts within. Lines 29-40 merely prepare for the diff call by 
+getting the class declaration from the pull request. Line 42 uses a 
+`MergeClassDeclarationSyntaxes` helper function to match all the declaration 
+together . For example, if there are two class declarations in a file they need 
+to be matched up between all three versions of the file. Once the class 
+declarations are matched, they are finally compared using `Diff3` on line 43. 
+Classes with no conflicts are filtered out on line 44, and any classes that 
+make it to line 45 are false negatives and are reported.
 
 \subsubsection{Future Work}
 
@@ -919,7 +916,7 @@ that creates a derived class.
 \begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{FalseNegativeErrorList}
-\caption{Visual Studio’s error list showing two false-negatives reported in 
+\caption{Visual Studio's error list showing two false-negatives reported in 
 the test repo}
 \label{fnerrorlist}
 \end{figure}
@@ -1187,7 +1184,6 @@ algorithm is called `diff3` and has a corresponding `diff3` Unix utility.
 \label{diff3algorithm}
 \end{figure}
 
-
 The Diff3 algorithm, as shown in Figure~\ref{diff3algorithm}, delegates to 
 the Diff routine. Most of Diff’s work is done by Roslyn. 
 Figure~\ref{diffcompare} shows the wrapper for that function. The reason that 
@@ -1202,7 +1198,7 @@ Diff component is used. The `GetConflicts` helper function shown in
 Figure~\ref{diff3getconflicts} finds diff spans that overlap and includes all 
 the changes involved in a conflict object.
 
-\begin{figure}[!htb]
+\begin{figure}[!H]
 \centering
 \begin{lstlisting}
 public static IEnumerable<Diff> Compare(SyntaxTree ancestor, 
@@ -1235,7 +1231,7 @@ provided by Rosyn}
 \label{diffcompare}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[!H]
 \centering
 \begin{lstlisting}
         public static Diff3Result Compare(SyntaxTree ancestor, 
@@ -1261,7 +1257,7 @@ and then returns a special result object}
 \label{diff3compare}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[!H]
 \centering
 \begin{lstlisting}
 private static IEnumerable<Conflict> GetConflicts(IEnumerable<Diff> local, 
@@ -1322,6 +1318,9 @@ and other languages
 
 \item[AST:] Abstract Syntax Tree is a parsed data structure that represents 
 all of the tokens in source code.
+
+\item[Code Smell:] A code smell is an indicator that is present in source
+code that corresponds to a deeper problem in the system
 
 \item[C\#:] Refers to C\# 6.0. Programming language that we are targeting. 
 See https://goo.gl/y6A13i.
