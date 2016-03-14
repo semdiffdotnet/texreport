@@ -22,6 +22,9 @@
 }
 \lstMakeShortInline`
 
+%Improve readability of table of contents
+\renewcommand\thesubsection{\Alph{subsection}}
+
 % No IEEEtrans section headers since we want our requrments to have numbers
 %\renewcommand\thesection{\arabic{section}}
 %\renewcommand\thesubsection{\thesection.\arabic{subsection}}
@@ -32,7 +35,7 @@
 %\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
 
 % Example of Constructing an image figure: (change label to unique identifier)
-%\begin{figure}[!t]
+%\begin{figure}[!htb]
 %\centering
 %\includegraphics[scale=1]{myfigure}
 %\caption{Simulation results for the network.}
@@ -41,7 +44,7 @@
 
 % Example of Constructing a code example figure: (change label to unique 
 % identifier)
-%\begin{figure}[!t]
+%\begin{figure}[!htb]
 %\centering
 %\begin{lstlisting}
 %public class Logger
@@ -193,7 +196,7 @@ called it will not log to the database but to the console. Because of the
 subtle nature of this bug it may be a long time before it is noticed and 
 difficult to debug.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public class Logger
@@ -216,7 +219,7 @@ logger}
 \label{example1}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public class Logger
@@ -400,7 +403,7 @@ Figure~\ref{PullRequestCode}, the `User` class is simply a class that holds a
 string that is the username because it nested in the JSON. The internal 
 function allows SemDiff to filter out unwanted files from the pull request.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 private static T DeserializeWithErrorHandling<T>(string content)
@@ -422,7 +425,7 @@ private static T DeserializeWithErrorHandling<T>(string content)
 
 
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public class PullRequest
@@ -459,7 +462,7 @@ function, `HttpGetAsync<T>(string url)`, is called, but this time SemDiff
 passes in a different custom class as the type, shown in 
 Figure~\ref{GitHubFiles}.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public class Files
@@ -485,7 +488,7 @@ a pull request, checks if they are a modified C\# file and then calls
 reason for calling `DownloadFileAsync()` twice is for SemDiff to pull down 
 both the pull request file and the common ancestor file. 
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 private async Task DownloadFileAsync(int prNum, string path, string sha, 
@@ -565,7 +568,7 @@ comment blocks at the top of methods that are moved with the methods and spaces
 in between the methods, but the changes were still recognized as a 
 false-positive condition.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{enumerate}
     \item Do Diff3 on syntax trees
@@ -600,7 +603,7 @@ uses that information to do do a `Diff3.Compare` on the code contained within
 each of the methods and returns the result. The conflicting changes are 
 filtered out on line 32. The remaining are false-positives and are returned.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalsePositive> ForFalsePositive(Repo repo,
@@ -706,7 +709,7 @@ conditions set up in the test repository (the resulting warnings are shown in
 Figure~\ref{fnerrorlist}). The basic algorithm shown in Figure~\ref{fnalgore} 
 is the same as it was presented in the design document.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{enumerate}
     \item Get base class (using semantic model)
@@ -754,7 +757,7 @@ declarations are matched, they are finally compared using `Diff3` on line 43.
 Classes with no conflicts are filtered out on line 44, and any classes that 
 make it to line 45 are false negatives and are reported.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
@@ -856,7 +859,7 @@ be shown if “B” was checked out). The location is also reported for
 false-positives, allowing Visual Studio to provide squiggles and hover over 
 messages as shown in Figure~\ref{fphoverover}.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{FalsePositiveErrorList}
 \caption{Visual Studio’s error list showing a false-positive reported in the 
@@ -864,7 +867,7 @@ test repo}
 \label{fperrorlist}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{FalsePositiveHoverOver}
 \caption{False positives support warnings with squiggles and hover over 
@@ -917,7 +920,7 @@ Github$>>$]'"}. An example of the warning is shown in Figure~\ref{fnerrorlist}.
 That error was collected by cloning the test repo and checking out the branch 
 that creates a derived class.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{FalseNegativeErrorList}
 \caption{Visual Studio’s error list showing two false-negatives reported in 
@@ -953,7 +956,7 @@ package is currently available in the NuGet Gallery and can be installed with
 \url{https://www.nuget.org/packages/SemDiff}. That page contains interesting 
 information including the number of times the package has been downloaded.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{SemDiffInPackageManagerSmall}
 \caption{This is how the SemDiff package is displayed in the NuGet package 
@@ -961,9 +964,9 @@ manager}
 \label{pacmansmall}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
-\includegraphics[scale=1]{SemDiffInPackageManager}
+\includegraphics[scale=.8]{SemDiffInPackageManager}
 \caption{After the package is selected, this larger window is displayed in the 
 NuGet package manager}
 \label{pacman}
@@ -1062,7 +1065,7 @@ Currently there are 4 milestones, 8 open issues, 18 closed issues, and 28
 closed pull requests. The wiki is setup, but many pages remain incomplete. 
 Figure~\ref{wikilist} shows the pages that are currently created.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{WikiList}
 \caption{List of all pages captured from the wiki}
@@ -1111,7 +1114,7 @@ license (unlike the GPLv3), but is still considered a best practice. The line
 that will be added is shown in Figure~\ref{mitheader}. That line was inspired 
 by a similar line that appears in the Roslyn source code.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 // Copyright (c) 2015 semdiffdotnet. Distributed under the MIT License. 
@@ -1177,7 +1180,7 @@ because it is used detecting both False-Positives and False-Negatives. The
 Diff3 module reflects the way that Git performs merges. The de facto merge 
 algorithm is called `diff3` and has a corresponding `diff3` Unix utility. 
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{enumerate}
     \item lchanges $\leftarrow$ Diff Local Branch and Ancestor
@@ -1203,7 +1206,7 @@ Diff component is used. The `GetConflicts` helper function shown in
 Figure~\ref{diff3getconflicts} finds diff spans that overlap and includes all 
 the changes involved in a conflict object.
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 public static IEnumerable<Diff> Compare(SyntaxTree ancestor, 
@@ -1236,7 +1239,7 @@ provided by Rosyn}
 \label{diffcompare}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
         public static Diff3Result Compare(SyntaxTree ancestor, 
@@ -1262,7 +1265,7 @@ and then returns a special result object}
 \label{diff3compare}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!htb]
 \centering
 \begin{lstlisting}
 private static IEnumerable<Conflict> GetConflicts(IEnumerable<Diff> local, 
