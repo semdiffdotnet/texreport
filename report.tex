@@ -689,9 +689,7 @@ extra lines are included in the conflicts.
 
 SemDiff will detect if the underlying methods used by another method have been 
 semantically changed given a set of files that have been changed by another 
-developer. This is defined as a false-negative. This will require at least 
-partial completion of requirement 0, because SemDiff will need to know the 
-format/state that it will receive files.
+developer. This is defined as a false-negative. 
 
 Specifically: A project has a `Logger` class with a `Log()` and a `LogAll()`. 
 `LogAll()` calls `Log()` for each log message. Another developer changes the 
@@ -838,8 +836,7 @@ and it will be easier to explain.
 
 At compile time, SemDiff will display a warning in the “Error List” when a 
 false-positive occurs between local files and remote files retrieved from a 
-pull request. This will require requirements 1 and 2 because the files and the 
-functionality to compare will be needed.
+pull request.
 
 We will show that a false-positive was detected.
 
@@ -898,14 +895,13 @@ in a pull request.”
 SemDiff will display a warning in the “Error List” (at compile time) when a 
 false-negative occurs between the semantics of the classes represented by the 
 local files and the classes represented by the remote files retrieved from a 
-pull request. This will require requirements 1 and 3 because the files and 
-functionality to semantically diff will be needed.
+pull request.
 
 We will show that a false-negative was detected.
 
 We will show which classes are in conflict.
 
-We will show which classes are in conflict.
+We will show the name of the file in conflict.
 
 We will provide a link to the pull request.
 
