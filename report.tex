@@ -34,7 +34,7 @@
 % Example of Constructing an image figure: (change label to unique identifier)
 %\begin{figure}[!t]
 %\centering
-%\includegraphics[width=\textwidth]{myfigure}
+%\includegraphics[scale=1]{myfigure}
 %\caption{Simulation results for the network.}
 %\label{fig_sim}
 %\end{figure}
@@ -477,8 +477,8 @@ public class Files
 \label{GitHubFiles}
 \end{figure}
 
-These files need to be downloaded. To do this, SemDiff uses two methods. The 
-first method, `DownloadFilesAsync()`,checks and sees if the files need to be 
+These files are downloaded using two methods. The first method, 
+`DownloadFilesAsync()`, checks and sees if the files need to be 
 updated. If they need to be updated, the method iterates through the files of 
 a pull request, checks if they are a modified C\# file and then calls 
 `DownloadFileAsync()` twice (shown in Figure~\ref{DownloadFileAsync}). The 
@@ -504,9 +504,9 @@ private async Task DownloadFileAsync(int prNum, string path, string sha,
 \end{figure}
 
 The RepoFolder is a path to AppData with some more details encoded in the path 
-to allow multiple projects. For instance, the repo \texit{\url{github.com
+to allow multiple projects. For instance, the repo \textit{\url{github.com
 /semdiffdotnet/curly-broccoli.git}} has an issue number 1 that could be stored 
-at \texit{\url{C:\\Users\[Username]\AppData\Roaming\SemDiff\semdiffdotnet
+at \textit{\url{C:\\Users\[Username]\AppData\Roaming\SemDiff\semdiffdotnet
 \curly-broccoli\1}} on the local disk. The line, 
 `new FileInfo(dir).Directory.Create();`, is there to make sure that the 
 directory is created, otherwise the next line with throw an error.
@@ -848,17 +848,17 @@ We will provide a link to the pull request.
 
 \subsubsection{Progress}
 The false positive warnings are being displayed as intended. The format of 
-warnings is \texit{"False-Positive between '<<Name Of File>>' and '(<<Title of 
-Pull Request>>)[<<Link to Github>>]'"}. An example of a warning is shown in 
-Figure~\ref{fperrorlist}. This warning was created by cloning the test repo and
-checking out the “A” side (a similar message would be shown if “B” was checked 
-out). The location is also reported for false-positives, allowing Visual Studio 
-to provide squiggles and hover over messages as shown in 
-Figure~\ref{fphoverover}.
+warnings is \textit{"False-Positive between '$<<$Name Of File$>>$' and 
+    '($<<$Title of Pull Request>>)[$<<$Link to Github$>>$]'"}. An example of 
+a warning is shown in Figure~\ref{fperrorlist}. This warning was created by 
+cloning the test repo and checking out the “A” side (a similar message would 
+be shown if “B” was checked out). The location is also reported for 
+false-positives, allowing Visual Studio to provide squiggles and hover over 
+messages as shown in Figure~\ref{fphoverover}.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalsePositiveErrorList}
+\includegraphics[scale=1]{FalsePositiveErrorList}
 \caption{Visual Studio’s error list showing a false-positive reported in the 
 test repo}
 \label{fperrorlist}
@@ -866,7 +866,7 @@ test repo}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalsePositiveHoverOver}
+\includegraphics[scale=1]{FalsePositiveHoverOver}
 \caption{False positives support warnings with squiggles and hover over 
 messages. This shows that the changes to Function12 could cause a 
 false-positive}
@@ -911,14 +911,15 @@ We will provide a link to the pull request.
 \subsubsection{Progress}
 
 The false negative warnings are being displayed as intended. The format of 
-warnings is \texit{"False-Negatives for type '<<Type Name (Base Class)>>' 
-between '(<<Title of Pull Request>>)[<<Link to Github>>]'"}. An example of the 
-warning is shown in Figure~\ref{fnerrorlist}. That error was collected by 
-cloning the test repo and checking out the branch that creates a derived class.
+warnings is \textit{"False-Negatives for type '$<<$Type Name (Base 
+Class)$>>$' between '($<<$Title of Pull Request$>>$)[$<<$Link to 
+Github$>>$]'"}. An example of the warning is shown in Figure~\ref{fnerrorlist}. 
+That error was collected by cloning the test repo and checking out the branch 
+that creates a derived class.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{FalseNegativeErrorList}
+\includegraphics[scale=1]{FalseNegativeErrorList}
 \caption{Visual Studio’s error list showing two false-negatives reported in 
 the test repo}
 \label{fnerrorlist}
@@ -954,7 +955,7 @@ information including the number of times the package has been downloaded.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{SemDiffInPackageManagerSmall}
+\includegraphics[scale=1]{SemDiffInPackageManagerSmall}
 \caption{This is how the SemDiff package is displayed in the NuGet package 
 manager}
 \label{pacmansmall}
@@ -962,7 +963,7 @@ manager}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{SemDiffInPackageManager}
+\includegraphics[scale=1]{SemDiffInPackageManager}
 \caption{After the package is selected, this larger window is displayed in the 
 NuGet package manager}
 \label{pacman}
@@ -1063,7 +1064,7 @@ Figure~\ref{wikilist} shows the pages that are currently created.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{WikiList}
+\includegraphics[scale=1]{WikiList}
 \caption{List of all pages captured from the wiki}
 \label{wikilist}
 \end{figure}
