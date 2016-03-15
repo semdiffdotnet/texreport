@@ -3,6 +3,7 @@
 \usepackage{listings}  
 \usepackage[pdftex]{graphicx}
 \usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage[section]{placeins}
 
 %Configure graphicx package
 \graphicspath{{./images/}}
@@ -17,7 +18,6 @@
 	tabsize=4,
 	aboveskip=15pt,
 	belowskip=0pt,
-	escapechar=@,
     numbers=left
 }
 \lstMakeShortInline`
@@ -424,7 +424,7 @@ private static T DeserializeWithErrorHandling<T>(string content)
 
 
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \begin{lstlisting}
 public class PullRequest
@@ -461,7 +461,7 @@ function, `HttpGetAsync<T>(string url)`, is called, but this time SemDiff
 passes in a different custom class as the type, shown in 
 Figure~\ref{GitHubFiles}.
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \begin{lstlisting}
 public class Files
@@ -480,14 +480,14 @@ public class Files
 \end{figure}
 
 These files are downloaded using two methods. The first method, 
-`DownloadFilesAsync()`, checks and sees if the files need to be 
+`DownloadFileAsync()`, checks and sees if the files need to be 
 updated. If they need to be updated, the method iterates through the files of 
 a pull request, checks if they are a modified C\# file and then calls 
 `DownloadFileAsync()` twice (shown in Figure~\ref{DownloadFileAsync}). The 
 reason for calling `DownloadFileAsync()` twice is for SemDiff to pull down 
 both the pull request file and the common ancestor file. 
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \begin{lstlisting}
 private async Task DownloadFileAsync(int prNum, string path, string sha, 
@@ -554,18 +554,7 @@ changing the semantics and creates a pull request, the current developer edits
 
 \end{quote}
 
-\subsubsection{Progress}
-
-The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
-`Analysis` class. The logic is unchanged from the design document. The test 
-repo has been used used for testing the implementation and the results have 
-been promising. Although there were concerns earlier in the project, whitespace 
-doesn’t seem to break false positive detection. The test repo has large xml 
-comment blocks at the top of methods that are moved with the methods and spaces 
-in between the methods, but the changes were still recognized as a 
-false-positive condition.
-
-\begin{figure}[!htb]
+\begin{figure}[h]
 \centering
 \begin{enumerate}
     \item Do Diff3 on syntax trees
@@ -583,24 +572,18 @@ destination)
 \label{fpalgore}
 \end{figure}
 
-\subsubsection{Methodology}
+\subsubsection{Progress}
 
-The `ForFalsePositive` method shown in Figure~\ref{anforfp} is the 
-implementation for the algorithm shown in Figure~\ref{fpalgore}. This section 
-will break the method into more manageable sections and explain them.
+The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
+`Analysis` class. The logic is unchanged from the design document. The test 
+repo has been used used for testing the implementation and the results have 
+been promising. Although there were concerns earlier in the project, whitespace 
+doesn’t seem to break false positive detection. The test repo has large xml 
+comment blocks at the top of methods that are moved with the methods and spaces 
+in between the methods, but the changes were still recognized as a 
+false-positive condition.
 
-The purpose of first part of method, lines 4-14, gets the remaining 
-`SyntaxTree`s from the pull requests in order to run the `Diff3.Compare` on 
-line 16. The statement on line 19 and 20 gets all the conflicts that are 
-contained within methods and enumerates them in an `foreach` loop. The 
-statement on line 22 gets the ancestor method and the `GetInnerMethodConflicts` 
-helper method looks at the list of inserted methods populated on line 17 in 
-order to retrieve the matching function that was inserted. The helper function 
-uses that information to do do a `Diff3.Compare` on the code contained within 
-each of the methods and returns the result. The conflicting changes are 
-filtered out on line 32. The remaining are false-positives and are returned.
-
-\begin{figure}[!htb]
+\begin{figure}[!h]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalsePositive> ForFalsePositive(Repo repo,
@@ -652,6 +635,22 @@ public static IEnumerable<DetectedFalsePositive> ForFalsePositive(Repo repo,
 \label{anforfp}
 \end{figure}
 
+\subsubsection{Methodology}
+
+The `ForFalsePositive` method shown in Figure~\ref{anforfp} is the 
+implementation for the algorithm shown in Figure~\ref{fpalgore}. This section 
+will break the method into more manageable sections and explain them.
+
+The purpose of first part of method, lines 4-14, gets the remaining 
+`SyntaxTree`s from the pull requests in order to run the `Diff3.Compare` on 
+line 16. The statement on line 19 and 20 gets all the conflicts that are 
+contained within methods and enumerates them in an `foreach` loop. The 
+statement on line 22 gets the ancestor method and the `GetInnerMethodConflicts` 
+helper method looks at the list of inserted methods populated on line 17 in 
+order to retrieve the matching function that was inserted. The helper function 
+uses that information to do do a `Diff3.Compare` on the code contained within 
+each of the methods and returns the result. The conflicting changes are 
+filtered out on line 32. The remaining are false-positives and are returned.
 
 \subsubsection{Future Work}
 
@@ -671,7 +670,6 @@ endings than the versions cloned locally. When the files are processed by
 Although this isn’t directly a bug with the function shown in 
 Figure~\ref{anforfp}, this makes determining false-positives impossible because 
 extra lines are included in the conflicts.
-
 
 
 
@@ -704,7 +702,7 @@ conditions set up in the test repository (the resulting warnings are shown in
 Figure~\ref{fnerrorlist}). The basic algorithm shown in Figure~\ref{fnalgore} 
 is the same as it was presented in the design document.
 
-\begin{figure}[!htb]
+\begin{figure}[h]
 \centering
 \begin{enumerate}
     \item Get base class (using semantic model)
@@ -725,7 +723,7 @@ The `ForFalseNegative` method shown in Figure~\ref{anforfn} contains nearly all
 of the code for detecting false-negatives. This section breaks down and 
 explores the code in manageable chunks.
 
-\begin{figure}[!htb]
+\begin{figure}[!b]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
@@ -787,16 +785,17 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
 \label{anforfn}
 \end{figure}
 
-Getting the base class is a complex process that requires several statements. 
-The first statement, lines 4-7, retrieves all nodes of the  
-`ClassDeclarationSyntax` type from the abstract syntax tree. The 
+Getting the base class requires several statements. 
+The first statement, lines 4-7, retrieves all `ClassDeclarationSyntax` nodes
+from the abstract syntax tree. The 
 `ClassDeclarationSyntax` is the type of the nodes in Roslyn’s abstract syntax 
 trees that creates classes. The next statement, lines 9-10, uses the class 
 declarations to get corresponding `ITypeSymbol` instances. The `ITypeSymbol` is 
-an interface that provides access to the semantic information about a type. The 
+an interface that provides access to semantic information about a type. The 
 statement on lines 12-15 uses the `ITypeSymbol` interface to get the 
 `SyntaxReference`s for the base classes. Lines 17-19 are executed to retrieve 
-the `ClassDeclarationSyntax`; the base class has been successfully retrieved.
+the `ClassDeclarationSyntax` of the base class.
+
 
 The next two steps are to get the file name from the base class and use it to 
 lookup the pull requests using the file name. For each base class, the name is 
@@ -846,7 +845,7 @@ We will provide a link to the pull request.
 \subsubsection{Progress}
 The false positive warnings are being displayed as intended. The format of 
 warnings is \textit{"False-Positive between '$<<$Name Of File$>>$' and 
-    '($<<$Title of Pull Request>>)[$<<$Link to Github$>>$]'"}. An example of 
+    '($<<$Title of Pull Request$>>$)[$<<$Link to Github$>>$]'"}. An example of 
 a warning is shown in Figure~\ref{fperrorlist}. This warning was created by 
 cloning the test repo and checking out the “A” side (a similar message would 
 be shown if “B” was checked out). The location is also reported for 
@@ -880,6 +879,8 @@ message format also doesn’t specify whether the the current message was moved
 locally or remotely. An improvement would be displaying something like “method 
 has been moved, but was edited in a pull request” or “edited method was moved 
 in a pull request.”
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Displaying False-Negatives Warnings in Error List}%%%%%%%%%%%%%%%%%
@@ -979,6 +980,8 @@ requirement. Few people have documented building a NuGet package for Roslyn
 Analyzers in particular. Analyzers are very different from most packages and 
 require a different method for building the NuGet package. 
 
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Performance}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1051,19 +1054,19 @@ motivational purpose of the project.
 
 \end{quote}
 
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=.9]{WikiList}
+\caption{List of all pages captured from the wiki}
+\label{wikilist}
+\end{figure}
+
 \subsubsection{Progress}
 The project source code is hosted on GitHub, and the team has also used the 
 issue tracking, pull requests, and milestone features built into GitHub. 
 Currently there are 4 milestones, 8 open issues, 18 closed issues, and 28 
 closed pull requests. The wiki is setup, but many pages remain incomplete. 
 Figure~\ref{wikilist} shows the pages that are currently created.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=1]{WikiList}
-\caption{List of all pages captured from the wiki}
-\label{wikilist}
-\end{figure}
 
 \subsubsection{Future Work}
 
