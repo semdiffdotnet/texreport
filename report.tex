@@ -255,8 +255,8 @@ more popular. With a compiler as a service model, the compiler provides a
 large API for inspecting and interpreting both the syntax trees and the 
 semantic models of the code. 
 
-In 2015, Microsoft released a new C\# and Visual Basic compiler referred to as `
-Roslyn' that uses the compiler as a service model. Roslyn provides a rich API 
+In 2015, Microsoft released a new C\# and Visual Basic compiler referred to as 
+`Roslyn' that uses the compiler as a service model. Roslyn provides a rich API 
 including a ^SyntaxTree^ object that represents the abstract syntax tree of a 
 file, a ^SemanticModel^ object that represents how a single ^SyntaxTree^ is 
 connected to others, and a ^DiagnosticAnalyzer^ interface. The ^SyntaxTree^ 
@@ -348,7 +348,7 @@ right direction.
 %-----------------------------------------------------------------------------|
 
 The following sections detail the progress on all requirements. Each section 
-summarizes the requrment in the title and states the full requirement text at 
+summarizes the requirement in the title and states the full requirement text at 
 the beginning.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -527,7 +527,7 @@ Additionally, although the GitHub API documentation fairly comprehensive, it
 is missing a few things that could be convenient. For instance, field specific 
 documentation is missing. SemDiff ran into this when testing pagination on the Roslyn 
 repository. One pull request contained more than three hundred changed files. 
-This caused querying GitHub to fail because a new memeber of the ^StatusEnum^ 
+This caused querying GitHub to fail because a new member of the ^StatusEnum^ 
 called ^changed^ was found. The ^StatusEnum^ holds all the possible values of 
 the ^Status^ field of the file object shown in Figure~\ref{GitHubFiles}. The 
 team had to contact GitHub support to find out what the possible value of the 
@@ -649,7 +649,7 @@ conflicts contained within methods and enumerates them in an ^foreach^ loop.
 The statement on line 22 gets the ancestor method and the 
 ^GetInnerMethodConflicts^ helper method called on line 26 looks at the list of 
 inserted methods populated on line 17 in order to retrieve the matching 
-function that was inserted. The helper function uses that information to do do 
+function that was inserted. The helper function uses that information to do 
 a ^Diff3.Compare^ on the code contained within each of the methods and returns 
 the result. Line 32 filters out the conflicting changes. The remaining are 
 false-positives and are returned.
