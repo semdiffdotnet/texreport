@@ -369,10 +369,10 @@ SemDiff uses ^Newtonsoft.Json^ and Microsoft's ^HttpClient^ library to query
 and parse GitHub's API. ^Newtonsoft.Json^ parses JSON, allowing SemDiff to 
 have a function that handles all the JSON with one line of code. In order to 
 handle API errors, the actual function, shown in 
-Figure~\ref{DeserializeNewtonsoft}, is slightly longer. Each call to an API 
+Figure~\ref{deserializeNewtonsoft}, is slightly longer. Each call to an API 
 requires a class that mirrors the data structure of the JSON. For example, the 
 call for getting pull requests uses the class shown in 
-Figure~\ref{ PullRequestCode}. In Figure~\ref{PullRequestCode}, the ^User^ 
+Figure~\ref{PullRequestCode}. In Figure~\ref{PullRequestCode}, the ^User^ 
 class holds a username string. This is nessasary because the JSON structure 
 was nested.
 
@@ -499,14 +499,8 @@ software will handle pull requests changing. As we move forward this will
 allow us to refactor our project.
 
 Additionally, although the GitHub API documentation fairly comprehensive, it 
-is missing a few things that could be convenient. For instance, there is no 
-single list of all the error codes that the API can produce, rather, errors 
-are only documented next to the documentation for endpoints. This makes it 
-hard for the program to be sure that it is handling all the errors that could 
-occur in production.
-
-Another example of missing documentation is the lack of field specific 
-documentation. SemDiff ran into this when testing pagination on the Roslyn 
+is missing a few things that could be convenient. For instance, field specific 
+documentation is missing. SemDiff ran into this when testing pagination on the Roslyn 
 repository. One pull requst contained more than three hundred changed files. 
 This caused quering GitHub to fail because a new memeber of the ^StatusEnum^ 
 called ^changed^ was found. The ^StatusEnum^ holds all the possible values of 
@@ -858,8 +852,6 @@ or remotely. An improvement would be displaying something like ``method has
 been moved, but was edited in a pull request'' or ``edited method was moved in a 
 pull request.''
 
-\newpage
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Displaying False-Negatives Warnings in Error List}%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -936,14 +928,6 @@ manager}
 \label{pacmansmall}
 \end{figure}
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=.8]{SemDiffInPackageManager}
-\caption{After the package is selected, this larger window is displayed in the 
-NuGet package manager}
-\label{pacman}
-\end{figure}
-
 \subsubsection{Future Work}
 
 The package could be improved by providing an icon for the package, replacing 
@@ -960,7 +944,13 @@ different method for building the NuGet package. For example, packages
 usually have dependencies, but analyzers cannot have dependencies because 
 that would result in extra packages being installed to the project.
 
-\newpage
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=.8]{SemDiffInPackageManager}
+\caption{After the package is selected, this larger window is displayed in the 
+NuGet package manager}
+\label{pacman}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Performance}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1019,6 +1009,13 @@ with the user. Therefore, alerts must contain all the information required to
 understand why an alert was triggered without being cryptic. SemDiff's alerts 
 are currently informative, but will continue to evolve.
 
+\begin{figure}[!b]
+\centering
+\includegraphics[scale=.8]{WikiList}
+\caption{List of all pages captured from the wiki}
+\label{wikilist}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{GitHub Project Hosting}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1033,13 +1030,6 @@ including a Getting Started guide, an API Guide with code examples, and
 motivational purpose of the project.
 
 \end{quote}
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=.9]{WikiList}
-\caption{List of all pages captured from the wiki}
-\label{wikilist}
-\end{figure}
 
 \subsubsection{Progress}
 The project source code is hosted on GitHub, and the team has also used the 
