@@ -84,7 +84,23 @@
 \pagenumbering{gobble} %removes page number
 
 \begin{abstract}
-Large colaborative software projects involve constantly changing repositories, numerous merge conflicts, and subtle runtime errors caused by semantic conflicts. These issues cause a large investment of time that could be used to work on more meaningful changes to the project. Current merge tools examine differences in the text between versions of code. Without using the semantics of the code results in unnecessary conflicts and subtle bugs being missed. SemDiff is a Roslyn Analyzer for C\# projects that helps identify non-semantic code changes that can be ignored as well as semantic changes that introduce potential runtime errors. SemDiff produces a NuGet package that is installed with Visual Studio. The package provides visual warnings of non-meaningful conflicts and identifies potential locations for runtime errors. Alerting developers early reduces bug counts and time saved for both developers and project managers. Bug counts are lowered by reducing the quantity of subtle bugs caussed by semantic conflicts. Reducing runtime bugs allows developers to spend less time replicating and debugging hard to find runtime errors and less merge conflicts allow developers and managers to use less time resolving merge conflict manually. 
+Large collaborative software projects involve constantly changing repositories, 
+numerous merge conflicts, and subtle runtime errors caused by semantic 
+conflicts. These issues cause a large investment of time that could be used to 
+work on more meaningful changes to the project. Current merge tools examine 
+differences in the text between versions of code. Without using the semantics of 
+the code results in unnecessary conflicts and subtle bugs being missed. SemDiff 
+is a Roslyn Analyzer for C\# projects that helps identify non-semantic code 
+changes that can be ignored as well as semantic changes that introduce potential 
+runtime errors. SemDiff produces a NuGet package that is installed with Visual 
+Studio. The package provides visual warnings of non-meaningful conflicts and 
+identifies potential locations for runtime errors. Alerting developers early 
+reduces bug counts and time saved for both developers and project managers. Bug 
+counts are lowered by reducing the quantity of subtle bugs caused by semantic 
+conflicts. Reducing runtime bugs allows developers to spend less time 
+replicating and debugging hard to find runtime errors and less merge conflicts 
+allow developers and managers to use less time resolving merge conflict 
+manually. 
 \end{abstract}
 
 \newpage
@@ -105,14 +121,23 @@ Large colaborative software projects involve constantly changing repositories, n
 \subsection{Overview}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This report details the motivation, purpose, methodology, and results of the `Semantic Diff via C\# Compiler Platform' (SemDiff) project. The introduction contains a background section, explains the motivation and purpose, and the overall progress of the project. Then the project progress section provides a section on each project requirement that contain the overall progress, current and future work, problems encountered, and the solutions to problems when applicable. Throughout the paper, interesting code and images are included to further explore and explain parts of SemDiff. The report's conclusion summarizes the current status of the project and a glossery defines technical terms used throughout the document.
+This report details the motivation, purpose, methodology, and results of the 
+`Semantic Diff via C\# Compiler Platform' (SemDiff) project. The introduction 
+contains a background section, explains the motivation and purpose, and the 
+overall progress of the project. Then the project progress section provides a
+section on each project requirement that contain the overall progress, current 
+and future work, problems encountered, and the solutions to problems when 
+applicable. Throughout the paper, interesting code and images are included to 
+further explore and explain parts of SemDiff. The report's conclusion 
+summarizes the current status of the project and a glossary defines technical 
+terms used throughout the document.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Background}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Mass collaboration in large software projects results in considerable 
-overhead. Repositories for these projects contain dozens of pull requsts a 
+overhead. Repositories for these projects contain dozens of pull requests a 
 week from numerous contributors. It is difficult for every developer to be 
 fully aware of all pending changes to the repository. Conflicting changes to a 
 file occurs often and result in merge conflicts. The common workflow is that 
@@ -131,8 +156,8 @@ content.
 
 Two major problems arise since current tools do not consider the meaning of 
 the code being compared. The first problem is when a conflict is identified 
-but semantically there should be no conflict. This is known as a false-
-positive. For example, consider the situation of the ``moved method'' 
+but semantically there should be no conflict. This is known as a 
+false-positive. For example, consider the situation of the ``moved method'' 
 conflict. Suppose a developer, Adam, edits a method in a large file to fix a 
 big. Adam passes all tests so he creates a pull request with his changes. 
 Before the changes are merged, another developer, Bob, moves the location of 
@@ -152,7 +177,7 @@ The second problem is known as a false-negative. A false-negative occurs when
 text-based tools do not find a conflict between changed files even though 
 there is a semantic conflict. False-negatives are subtle and can introduce 
 runtime bugs that are difficult to locate. These conflicts usually occur 
-across files that have a semantic connection. For example a developer, Ross, 
+across files that have a semantic connection. For example, a developer, Ross, 
 is implementing a new ^DatabaseLogger^. The project already has a generic 
 ^Logger^ that writes logs to the console as shown in Figure~\ref{example1}. 
 Ross creates a ^DatabaseLogger^ class derived from ^Logger^ and overrides the 
@@ -214,12 +239,12 @@ of the generic logger shown in Figure~\ref{example1}}
 \end{figure}
 
 Both of these problems illustrate the problem with text-based diffs. A large 
-amount of time is spent resolving conflicts that should have never occured and 
+amount of time is spent resolving conflicts that should have never occurred and 
 locating bugs that could have been identified ahead of time. All of this time 
 could be used by the project managers to make more meaningful improvements. 
 Understanding the semantics of programs create a barrier for making tools that 
 can understand false-positives and false-negative. With most languages, 
-retriving information about a program's semantics can be challenging. It may 
+retrieving information about a program's semantics can be challenging. It may 
 be necessary to build a parser, define an abstract syntax tree, and build all 
 the logic for understanding what the syntax constructs do. All that work is 
 redundant because the languages compiler already has the semantic information. 
@@ -230,7 +255,7 @@ more popular. With a compiler as a service model, the compiler provides a
 large API for inspecting and interpreting both the syntax trees and the 
 semantic models of the code. 
 
-In 2015, Microsoft released a new C\# and Visual Basic compiler refered to as `
+In 2015, Microsoft released a new C\# and Visual Basic compiler referred to as `
 Roslyn' that uses the compiler as a service model. Roslyn provides a rich API 
 including a ^SyntaxTree^ object that represents the abstract syntax tree of a 
 file, a ^SemanticModel^ object that represents how a single ^SyntaxTree^ is 
@@ -327,7 +352,7 @@ summarizes the requrment in the title and states the full requirement text at
 the beginning.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Quering GitHub for Pull Request}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Querying GitHub for Pull Request}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \textbf{Requirement:}
@@ -343,10 +368,10 @@ and the files changed.
 
 SemDiff successfully queries GitHub and downloads all pull requests. The 
 project stores a list of pull requests and associated files locally. GitHub 
-impliments a rate limit for API calls, requsts beyond the rate limit will 
+implements a rate limit for API calls, requests beyond the rate limit will 
 result in an error response. SemDiff implements authentication to increase the 
 rate limit from 60 to 5000. This is important because SemDiff uses many 
-requests, each time SemDiff checks for pull requests it it must request a list 
+requests, each time SemDiff checks for pull requests it must request a list 
 of pull requests; if there are new pull requests then it makes another call 
 for each pull request found to get a list of file metadata.
 
@@ -373,7 +398,7 @@ Figure~\ref{deserializeNewtonsoft}, is slightly longer. Each call to an API
 requires a class that mirrors the data structure of the JSON. For example, the 
 call for getting pull requests uses the class shown in 
 Figure~\ref{PullRequestCode}. In Figure~\ref{PullRequestCode}, the ^User^ 
-class holds a username string. This is nessasary because the JSON structure 
+class holds a username string. This is necessary because the JSON structure 
 was nested.
 
 \begin{figure}[!htb]
@@ -431,7 +456,7 @@ The ^IList^ of ^Files^ in Figure~\ref{PullRequestCode} is not setup on the
 initial parsing because the files are not retrieved with the list of pull 
 requests. Once the list of pull requests has been retrieved from GitHub, an API 
 call is made for each of the open pull requests that were found. File metadata 
-is retrived and deserialized with the class shown in Figure~\ref{GitHubFiles}. 
+is retrieved and deserialized with the class shown in Figure~\ref{GitHubFiles}. 
 
 \begin{figure}[p]
 \centering
@@ -483,7 +508,7 @@ encoded in the path to allow multiple projects. For instance, the repo
 number 1 that will be stored at 
 ^C:\Users\[Username]\AppData\Roaming\SemDiff\semdiffdotnet\curly-broccoli\1^ 
 on the local disk. The line, ^new FileInfo(dir).Directory.Create();^ insures 
-that the directory is created, allowing the next line to execute succesfully.
+that the directory is created, allowing the next line to execute successfully.
 
 \subsubsection{Future Work}
 
@@ -501,8 +526,8 @@ allow us to refactor our project.
 Additionally, although the GitHub API documentation fairly comprehensive, it 
 is missing a few things that could be convenient. For instance, field specific 
 documentation is missing. SemDiff ran into this when testing pagination on the Roslyn 
-repository. One pull requst contained more than three hundred changed files. 
-This caused quering GitHub to fail because a new memeber of the ^StatusEnum^ 
+repository. One pull request contained more than three hundred changed files. 
+This caused querying GitHub to fail because a new memeber of the ^StatusEnum^ 
 called ^changed^ was found. The ^StatusEnum^ holds all the possible values of 
 the ^Status^ field of the file object shown in Figure~\ref{GitHubFiles}. The 
 team had to contact GitHub support to find out what the possible value of the 
@@ -552,7 +577,7 @@ refers to the local copy or the remote copy}
 
 The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
 ^Analysis^ class. The logic is unchanged from the design document. The test 
-repo has been used used for testing the implementation and the results have 
+repo has been used for testing the implementation and the results have 
 been promising. Although there were concerns earlier in the project, whitespace 
 doesn't seem to break false positive detection. The test repo has large XML 
 comment blocks at the top of methods that are moved with the methods and spaces 
@@ -618,7 +643,7 @@ implementation for the algorithm shown in Figure~\ref{fpalgore}. This section
 will break the method into more manageable sections and explain them.
 
 The purpose of first part of method, lines 4-14, gets the remaining syntax 
-trees from the pull requests that will be passed inte the call to 
+trees from the pull requests that will be passed into the call to 
 ^Diff3.Compare^ on line 16. The statement on line 19 and 20 gets all the 
 conflicts contained within methods and enumerates them in an ^foreach^ loop. 
 The statement on line 22 gets the ancestor method and the 
@@ -770,7 +795,7 @@ base class.
 
 The next two steps are to get the file name from the base class and use it to 
 lookup the pull requests using the file name. For each base class, lines 23-25 
-retrieveds the name on lines 23-25. The name is then passed into ^GetPulls^ on 
+retrieves the name on lines 23-25. The name is then passed into ^GetPulls^ on 
 line 27. If the file was not found in the changed files for the repo then an 
 empty ^IEnumerable^ will be returned, otherwise the inner function will be 
 evaluated.
@@ -779,7 +804,7 @@ The last steps of the algorithm are to run ^Diff3^ on the components and see if
 there are conflicts within. Lines 29-40 prepare for the diff call by 
 getting the class declaration from the pull request. Line 42 uses a 
 ^MergeClassDeclarationSyntaxes^ helper function to match all the declaration 
-together. If there are two class declarations in a file they need 
+together. If there are two class declarations in a file, they need 
 to be matched up between all three versions of the file. Once the class 
 declarations are matched, they are finally compared using ^Diff3^ on line 43. 
 Line 44 filters out classes with no conflicts; any classes that execute line 
@@ -818,7 +843,7 @@ SemDiff will provide a link to the pull request.
 SemDiff displays false positive warnings as intended. The format of 
 warnings is \textit{``False-Positive between `$<$Name Of File$>$' and 
 `($<$Title of Pull Request$>$)[$<$Link to Github$>$]'\,''}. 
-Figure~\ref{fperrorlist} shows an exampl created by cloning the test repo 
+Figure~\ref{fperrorlist} shows an example created by cloning the test repo 
 and checking out the ``A'' side---a similar message would be shown if ``B'' was 
 checked out. Reporting the location of false-positives allows Visual 
 Studio to provide squiggles and hover over messages as shown in 
@@ -846,8 +871,8 @@ false-positive}
 The false positive warnings display correctly, however there are a few ways 
 that they can be improved. Figure~\ref{fphoverover} shows underlines over the 
 entire function. With larger functions that will be obnoxious. Instead the 
-underline should be be placed under the identifier only. The current message 
-format also doesn't specify whether the the current message was moved locally 
+underline should be placed under the identifier only. The current message 
+format also doesn't specify whether the current message was moved locally 
 or remotely. An improvement would be displaying something like ``method has 
 been moved, but was edited in a pull request'' or ``edited method was moved in a 
 pull request.''
@@ -1123,7 +1148,7 @@ SemDiff will be built using C\# and the Roslyn API.
 
 SemDiff is implemented in C\# and uses the Roslyn APIs to compare syntax 
 trees. This project would not have been possible without Rosyln. A 
-black box compiler would have nessenitated writing a parser and semantic 
+black box compiler would have necessitated writing a parser and semantic 
 analyzer to complete the project. Roslyn is used in multiple places in SemDiff, 
 the most interesting uses of Roslyn is the ^ForFalseNegative^ function, shown 
 in Figure~\ref{anforfn}, that uses the ^SemanticModel^ to find the base class 
@@ -1180,9 +1205,9 @@ tracking, and documentation tools for software projects.
 provides tools like debuggers, compilers, code completion, and refactoring 
 tools to improve developer productivity.
 
-\item[KISS:] A software enginering principle and an acronym that stands for 
+\item[KISS:] A software engineering principle and an acronym that stands for 
 `keep it short and simple;' the idea of KISS is to make things `as simple as 
-possible, no simpiler'.
+possible, no simpler'.
 
 \item[NuGet Package:] Open-source package manager for the Microsoft 
 development platform that provides the ability to produce and consume package 
