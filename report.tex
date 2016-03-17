@@ -1,6 +1,7 @@
 \documentclass[draftclsnofoot,onecolumn]{IEEEtran}
 \usepackage{url}
 \usepackage{listings}  
+\usepackage{color}
 \usepackage[pdftex]{graphicx}
 \usepackage[caption=false,font=footnotesize]{subfig}
 \usepackage[section]{placeins}
@@ -11,14 +12,23 @@
 
 % Configure the lstlisting package 
 % en.wikibooks.org/wiki/LaTeX/Source_Code_Listings#Using_the_listings_package
+
+\definecolor{dblue}{rgb}{0,0,.2}
+\definecolor{dorange}{rgb}{.3,.06,0}
+\definecolor{dgreen}{rgb}{0,.2,0}
+
+
 \lstdefinestyle{cSharp}{
 	language=[Sharp]C, 
 	basicstyle=\small\ttfamily, 
 	lineskip={-0.1pt},
 	tabsize=4,
+    keywordstyle=\color{dblue}\bfseries,
 	aboveskip=15pt,
 	belowskip=0pt,
-    numbers=left
+    commentstyle=\color{dgreen}\itshape,
+    numbers=left,
+    stringstyle=\color{dorange}
 }
 \lstMakeShortInline^
 
