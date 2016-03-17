@@ -84,23 +84,7 @@
 \pagenumbering{gobble} %removes page number
 
 \begin{abstract}
-Large, collaborative software projects involve constantly changing repositories, 
-numerous merge conflicts, and subtle runtime errors caused by semantic 
-conflicts. These issues cause a large time investment that could be used to 
-work on more meaningful changes to the project. Current merge tools examine 
-differences in the text between versions of code. Analysis without using the 
-semantics of the code results in unnecessary conflicts and subtle bugs being 
-missed. SemDiff is a Roslyn Analyzer for C\# projects that helps identify 
-non-semantic code changes that can be ignored as well as semantic changes that 
-introduce potential runtime errors. SemDiff produces a NuGet package that is 
-installed with Visual Studio. The package provides visual warnings of 
-non-meaningful conflicts and identifies potential locations for runtime errors. 
-Alerting developers early reduces bug counts and saves time for both developers 
-and project managers. Bug counts are lowered by reducing the quantity of subtle 
-bugs caused by semantic conflicts. Reducing runtime bugs allows developers to 
-spend less time replicating and debugging hard to find runtime errors and less 
-merge conflicts allow developers and managers to use less time resolving merge 
-conflict manually. 
+Large collaborative software projects involve constantly changing repositories, numerous merge conflicts, and subtle runtime errors caused by semantic conflicts. These issues cause big time investments that can be used to work on more meaningful project changes. Current merge tools examine differences in the text between versions of code. Analysis without using the semantics of the code results in unnecessary conflicts and subtle bugs being missed. SemDiff is a Roslyn Analyzer for C\# projects that helps identify non-semantic code changes that can be ignored as well as semantic changes that introduce potential runtime errors. SemDiff produces a NuGet package that is installed with Visual Studio. The package provides visual warnings of non-meaningful conflicts and identifies potential locations for runtime errors. Less conflicts means that developers spend less time resolving merge conflicts manually. Warning users of runtime errors reduces the amount of bugs merged into repositories. By reducing the amount of bugs, developers spend less time replicating and debugging hard to find runtime errors. 
 \end{abstract}
 
 \newpage
