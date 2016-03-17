@@ -298,8 +298,8 @@ Planning for SemDiff was completed between October and December of 2015. The
 team met with Phillip Carter almost every weekend to talk about the project. 
 The project was split into four major parts: handling GitHub interaction, 
 false-positive detection, false-negative detection, and error message 
-generation. By the end of the term, both a requirement document and a design 
-document were completed. This report structure references the requirement 
+generation. By the end of the term, both a requirements document and a design 
+document were completed. This report structure references the requirements 
 document because it is the main standard that guided development of the project.
 
 \subsubsection{Winter Term}
@@ -320,8 +320,8 @@ moving forward. The team communicated with Facebook's Messenger outside of the
 meetings and the members have kept themselves updated, leaving few 
 miscommunications and problems.
 
-At beginning of next term, the team is planning a meeting with Phillip to 
-demonstrate the project and to insure that the developers are continuing in the 
+At the beginning of next term the team will be meeting with Phillip to 
+demonstrate the project and to ensure that the developers are continuing in the 
 right direction.
 
 %-----------------------------------------------------------------------------|
@@ -351,19 +351,16 @@ and the files changed.
 
 SemDiff successfully queries GitHub and downloads all pull requests. The 
 project stores a list of pull requests and associated files locally. GitHub 
-implements a rate limit for API calls, requests beyond the rate limit will 
+implements a rate limit for API calls and requests beyond the rate limit will 
 result in an error response. SemDiff implements authentication to increase the 
-rate limit from 60 to 5000. This is important because SemDiff uses many 
-requests, each time SemDiff checks for pull requests it must request a list 
-of pull requests; if there are new pull requests then it makes another call 
-for each pull request found to get a list of file metadata.
+rate limit from 60 to 5000. Each time SemDiff checks for pull requests it must request a list of pull requests. If there are new pull requests then it makes another call for each pull request found to get a "list of file" metadata. Because of the amount of requests it is important that SemDiff uses authentication in order to increase the rate limit.
 
-To further reduce the number of calls, the project checks to see if the pull 
+To further reduce the number of calls the project checks to see if the pull 
 requests have been updated before downloading the files. This is done through 
 the use of HTTP headers. GitHub sends an ^ETag^ when responding with a list of 
-pull requests. When the local cache of pull requests needs updating, the ^ETag^ 
+pull requests. When the local cache of pull requests needs updating the ^ETag^ 
 is placed in the ^If-None-Match^ header of the request. If the pull request 
-list has changed then a new ^ETag^ is received, otherwise the server responds 
+list has changed then a new ^ETag^ is received. Otherwise, the server responds 
 with an HTTP status code of 304 (not modified) indicating that the current 
 data is still accurate. This reduces the number of API calls and reduces time 
 spent sending data between SemDiff and GitHub. Additionally, the file's contents 
@@ -376,7 +373,7 @@ reduces file IO overhead.
 SemDiff uses ^Newtonsoft.Json^ and Microsoft's ^HttpClient^ library to query 
 and parse GitHub's API. ^Newtonsoft.Json^ parses JSON, allowing SemDiff to 
 have a function that handles all the JSON with one line of code. In order to 
-handle API errors, the actual function, shown in 
+handle API errors the actual function, shown in 
 Figure~\ref{deserializeNewtonsoft}, is slightly longer. Each call to an API 
 requires a class that mirrors the data structure of the JSON. For example, the 
 call for getting pull requests uses the class shown in 
@@ -411,7 +408,7 @@ private static T DeserializeWithErrorHandling<T>(string content)
 \begin{lstlisting}
 public class PullRequest
 {
- 	public int Number { get; set; }
+    public int Number { get; set; }
     public string State { get; set; }
     public string Title { get; set; }
     public bool Locked { get; set; }
@@ -437,7 +434,7 @@ public class PullRequest
 
 The ^IList^ of ^Files^ in Figure~\ref{PullRequestCode} is not setup on the 
 initial parsing because the files are not retrieved with the list of pull 
-requests. Once the list of pull requests has been retrieved from GitHub, an API 
+requests. Once the list of pull requests has been retrieved from GitHub an API 
 call is made for each of the open pull requests that were found. File metadata 
 is retrieved and deserialized with the class shown in Figure~\ref{GitHubFiles}. 
 
@@ -461,8 +458,8 @@ public class Files
 
 The file's contents are downloaded using two methods. The first method, 
 ^DownloadFilesAsync()^, checks and sees if the files need to be 
-updated. If they need to be updated, the method iterates through the files of 
-a pull request, checks if they are a modified C\# file and then calls 
+updated. If the files need to be updated the method iterates through the files of 
+a pull request, checks if they are a modified C\# file, and then calls 
 ^DownloadFileAsync()^ twice (shown in Figure~\ref{DownloadFileAsync}). The 
 reason for calling ^DownloadFileAsync()^ twice is for SemDiff to pull down 
 both the pull request file and the common ancestor file. 
@@ -502,12 +499,12 @@ portability. The number of file IO calls will also be reduced. For example,
 \subsubsection{Problems}
 
 This is the hardest part of the system to test, but also the most critical. 
-SemDiff will need to a more advanced test suite to effectively test how the 
+SemDiff will need to create a more advanced test suite to effectively test how the 
 software will handle pull requests changing. Moving forward this will 
-allow better refactor of the project.
+allow for better refactoring of the project.
 
 Additionally, although the GitHub API documentation fairly comprehensive, it 
-is missing a few things that could be convenient. For instance, field specific 
+is missing a few details that could be convenient. For instance, field specific 
 documentation is missing. SemDiff ran into this when testing pagination on the Roslyn 
 repository. One pull request contained more than three hundred changed files. 
 This caused querying GitHub to fail because a new member of the ^StatusEnum^ 
@@ -639,10 +636,10 @@ false-positives and are returned.
 
 \subsubsection{Future Work}
 
-The ^ForFalsePositive^ method shown in Figure~\ref{anforfn} currently has about 
+The ^ForFalsePositive^ method shown in Figure~\ref{anforfn} currently has around 
 20 lines of nearly identical code that is repeated (the repetitive lines have 
 been omitted). The subtle difference in functionality between the 
-two makes it challenging to combine the functionality together. In the future 
+two methods makes it challenging to combine the functionality together. In the future 
 this will be refactored to remove the repetitive block.
 
 
@@ -653,7 +650,7 @@ Currently, files downloaded from GitHub may have different line endings
 are processed by ^Diff^ it is then interpreted as adding (or removing) a 
 character on each line. Although this isn't directly a bug with the function 
 shown in Figure~\ref{anforfp}, this makes determining false-positives 
-impossible because extra lines are included in the conflicts.
+difficult because extra lines are included in the conflicts.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Detecting False-Negatives}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1147,8 +1144,7 @@ of the current file.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%|
 %-----------------------------------------------------------------------------|
 
-From the above information, it is clear that SemDiff is a beta level project. 
-There is a significant amount of testing and documentation for next term, but 
+As defined for this project, beta level functionality requires that all project features be implemented and working. Features for the project are defined by the requirements document. From the above information which details the implementation of every requirement, it is clear that SemDiff is a beta level project. There is a significant amount of testing and documentation for next term, but 
 the project will be ready and satisfy the requirements by Expo.
 
 %-----------------------------------------------------------------------------|
