@@ -534,17 +534,6 @@ changing the semantics and creates a pull request, the current developer edits
 
 \end{quote}
 
-\subsubsection{Progress}
-
-The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
-^Analysis^ class. The logic is unchanged from the design document. The test 
-repo has been used for testing the implementation and the results have 
-been promising. Although there were concerns earlier in the project, whitespace 
-doesn't seem to break false-positive detection. The test repo has large XML 
-comment blocks at the top of methods that are moved with the methods and spaces 
-in between the methods, but the changes were still recognized as a 
-false-positive condition.
-
 \begin{figure}[h]
 \centering
 \begin{enumerate}
@@ -563,6 +552,17 @@ destination)
 refers to the local copy or the remote copy}
 \label{fpalgore}
 \end{figure}
+
+\subsubsection{Progress}
+
+The algorithm defined in Figure~\ref{fpalgore} has been implemented in the 
+^Analysis^ class. The logic is unchanged from the design document. The test 
+repo has been used for testing the implementation and the results have 
+been promising. Although there were concerns earlier in the project, whitespace 
+doesn't seem to break false-positive detection. The test repo has large XML 
+comment blocks at the top of methods that are moved with the methods and spaces 
+in between the methods, but the changes were still recognized as a 
+false-positive condition.
 
 \begin{figure}[!h]
 \centering
@@ -701,16 +701,6 @@ else there is no false-positive.
 \label{fnalgore}
 \end{figure}
 
-Getting the base class requires several statements. Lines 4-7 retrieve all 
-^ClassDeclarationSyntax^ nodes from the abstract syntax tree. The 
-^ClassDeclarationSyntax^ is the type of the nodes in Roslyn's abstract syntax 
-trees that creates classes. The next statement, lines 9-10, uses the class 
-declarations to get corresponding ^ITypeSymbol^ instances. The ^ITypeSymbol^ 
-interface provides access to semantic information about a type. The statement 
-on lines 12-15 uses the ^ITypeSymbol^ interface to get the ^SyntaxReference^s 
-for the base classes. Lines 17-19 retrieve the ^ClassDeclarationSyntax^ of the 
-base class.
-
 \begin{figure}[!h]
 \centering
 \begin{lstlisting}
@@ -772,6 +762,16 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
 \caption{The ForFalseNegative method handles false-negative detection}
 \label{anforfn}
 \end{figure}
+
+Getting the base class requires several statements. Lines 4-7 retrieve all 
+^ClassDeclarationSyntax^ nodes from the abstract syntax tree. The 
+^ClassDeclarationSyntax^ is the type of the nodes in Roslyn's abstract syntax 
+trees that creates classes. The next statement, lines 9-10, uses the class 
+declarations to get corresponding ^ITypeSymbol^ instances. The ^ITypeSymbol^ 
+interface provides access to semantic information about a type. The statement 
+on lines 12-15 uses the ^ITypeSymbol^ interface to get the ^SyntaxReference^s 
+for the base classes. Lines 17-19 retrieve the ^ClassDeclarationSyntax^ of the 
+base class.
 
 The next two steps are to get the file name from the base class and use it to 
 lookup the pull requests using the file name. For each base class, lines 23-25 
