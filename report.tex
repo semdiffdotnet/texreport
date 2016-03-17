@@ -351,7 +351,7 @@ and the files changed.
 
 SemDiff successfully queries GitHub and downloads all pull requests. The 
 project stores a list of pull requests and associated files locally. GitHub 
-implements a rate limit for API calls and requests beyond the rate limit will 
+implements a rate limit for API calls. Requests beyond the rate limit will 
 result in an error response. SemDiff implements authentication to increase the 
 rate limit from 60 to 5000. Each time SemDiff checks for pull requests it must request a list of pull requests. If there are new pull requests then it makes another call for each pull request found to get a "list of file" metadata. Because of the amount of requests it is important that SemDiff uses authentication in order to increase the rate limit.
 
@@ -824,7 +824,7 @@ SemDiff displays false-positive warnings as intended. The format of
 warnings is \textit{``False-Positive between `$<$Name Of File$>$' and 
 `($<$Title of Pull Request$>$)[$<$Link to GitHub$>$]'\,.''} 
 Figure~\ref{fperrorlist} shows an example created by cloning the test repo 
-and checking out the ``A'' side---a similar message would be shown if ``B'' was 
+and checking out the ``A'' side; a similar message would be shown if ``B'' was 
 checked out. Reporting the location of false-positives allows Visual 
 Studio to provide squiggles and hover over messages as shown in 
 Figure~\ref{fphoverover}.
