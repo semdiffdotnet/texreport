@@ -84,23 +84,23 @@
 \pagenumbering{gobble} %removes page number
 
 \begin{abstract}
-Large collaborative software projects involve constantly changing repositories, 
+Large, collaborative software projects involve constantly changing repositories, 
 numerous merge conflicts, and subtle runtime errors caused by semantic 
-conflicts. These issues cause a large investment of time that could be used to 
+conflicts. These issues cause a large time investment that could be used to 
 work on more meaningful changes to the project. Current merge tools examine 
-differences in the text between versions of code. Without using the semantics of 
-the code results in unnecessary conflicts and subtle bugs being missed. SemDiff 
-is a Roslyn Analyzer for C\# projects that helps identify non-semantic code 
-changes that can be ignored as well as semantic changes that introduce potential 
-runtime errors. SemDiff produces a NuGet package that is installed with Visual 
-Studio. The package provides visual warnings of non-meaningful conflicts and 
-identifies potential locations for runtime errors. Alerting developers early 
-reduces bug counts and time saved for both developers and project managers. Bug 
-counts are lowered by reducing the quantity of subtle bugs caused by semantic 
-conflicts. Reducing runtime bugs allows developers to spend less time 
-replicating and debugging hard to find runtime errors and less merge conflicts 
-allow developers and managers to use less time resolving merge conflict 
-manually. 
+differences in the text between versions of code. Analysis without using the 
+semantics of the code results in unnecessary conflicts and subtle bugs being 
+missed. SemDiff is a Roslyn Analyzer for C\# projects that helps identify 
+non-semantic code changes that can be ignored as well as semantic changes that 
+introduce potential runtime errors. SemDiff produces a NuGet package that is 
+installed with Visual Studio. The package provides visual warnings of 
+non-meaningful conflicts and identifies potential locations for runtime errors. 
+Alerting developers early reduces bug counts and saves time for both developers 
+and project managers. Bug counts are lowered by reducing the quantity of subtle 
+bugs caused by semantic conflicts. Reducing runtime bugs allows developers to 
+spend less time replicating and debugging hard to find runtime errors and less 
+merge conflicts allow developers and managers to use less time resolving merge 
+conflict manually. 
 \end{abstract}
 
 \newpage
@@ -123,8 +123,8 @@ manually.
 
 This report details the motivation, purpose, methodology, and results of the 
 `Semantic Diff via C\# Compiler Platform' (SemDiff) project. The introduction 
-contains a background section, explains the motivation and purpose, and the 
-overall progress of the project. Then the project progress section provides a
+contains a background section, explains the motivation, purpose, and the 
+overall progress of the project. The project progress section provides a
 section on each project requirement that contain the overall progress, current 
 and future work, problems encountered, and the solutions to problems when 
 applicable. Throughout the paper, interesting code and images are included to 
@@ -140,16 +140,16 @@ Mass collaboration in large software projects results in considerable
 overhead. Repositories for these projects contain dozens of pull requests a 
 week from numerous contributors. It is difficult for every developer to be 
 fully aware of all pending changes to the repository. Conflicting changes to a 
-file occurs often and result in merge conflicts. The common workflow is that 
-developers will identify issues---bugs or new features. A developer will make 
+file occurs often and result in merge conflicts. The common workflow is for 
+developers to identify issues (bugs or new features). A developer will make 
 a branch, change the source to fix the issue, and then create a pull request. 
-After creation, the pull request reviewed by peers and management merges the 
+After creation, the pull request is reviewed by peers and management merges the 
 changes into the repository.
 
 Git is one of the most popular version control systems. In order to resolve 
-conflicts such as the above, git uses a text-based three-way merge. A three-
-way merge compares two files while also considering the ancestor of both 
-files. If a section of code differs in all three files it is marked as a 
+conflicts such as the above, git uses a text-based three-way merge. A 
+three-way merge compares two files while also considering the ancestor of 
+both files. If a section of code differs in all three files, it is marked as a 
 conflict and the user must resolve it manually. The merge is generic and 
 allows Git to use the same algorithm for all text files regardless of their 
 content.
@@ -159,16 +159,16 @@ the code being compared. The first problem is when a conflict is identified
 but semantically there should be no conflict. This is known as a 
 false-positive. For example, consider the situation of the ``moved method'' 
 conflict. Suppose a developer, Adam, edits a method in a large file to fix a 
-big. Adam passes all tests so he creates a pull request with his changes. 
+bug. Adam passes all tests so he creates a pull request with his changes. 
 Before the changes are merged, another developer, Bob, moves the location of 
 the method that Adam had edited. Bob might be moving the method because he was 
-refactoring the code, introducing a new method, or other code maintenance. Bob 
-is unaware that Adam edited the method because his development environment 
-provides no information about Adam's pull request. Bob's code passes all tests 
-so he creates a pull request. Later their manager, Chris, verifies that the 
-pull requests have been peer reviewed and attempts to merge them both into the 
-repository. One of the pull requests will merge correctly, however the other 
-will fail because of a conflict. Semantically there is no conflict between 
+refactoring the code, introducing a new method, or perform other code 
+maintenance. Bob is unaware that Adam edited the method because his development 
+environment provides no information about Adam's pull request. Bob's code passes 
+all tests so he creates a pull request. Later, their manager, Chris, verifies 
+that the pull requests have been peer reviewed and attempts to merge them both 
+into the repository. One of the pull requests will merge correctly, however the 
+other will fail because of a conflict. Semantically there is no conflict between 
 Adam's and Bob's changes. The program will run the same whether the method was 
 moved or not. However, Chris now must take extra time to manually review and 
 resolve the conflict.
@@ -183,7 +183,7 @@ is implementing a new ^DatabaseLogger^. The project already has a generic
 Ross creates a ^DatabaseLogger^ class derived from ^Logger^ and overrides the 
 ^Log^ method with new logic to store logs in a database. Ross does not override 
 ^LogAll^ because he sees that it merely delegates to the ^Log^ method. 
-However, before Ross' changes are merged in another developer, Smith, notices 
+However, before Ross' changes are merged, another developer, Smith, notices 
 that it is inefficient for the ^Logger^ in Figure~\ref{example1} to be calling 
 ^Log^ for every log instead of writing them all at once, so Smith creates the 
 logger shown in Figure~\ref{example2}. Smith is unaware of Ross' work and Ross 
@@ -191,9 +191,9 @@ is unaware of Smith's work. When their manager, Chris, merges their pull
 requests he finds that they merge with out errors. After all, Ross and Smith 
 edited different files. Even though they merge without error and both Ross' 
 and Smith's versions work correctly there is now a bug in the code. Calling 
-the ^LogAll^ method on the ^DatabaseLogger^ will not log to the database but 
-to the console. Because of the subtle nature of this bug, it will be difficult 
-to debug and may be a long time before it is reported.
+the ^LogAll^ method on the ^DatabaseLogger^ will log to the console, not the 
+database. Because of the subtle nature of this bug, it will be difficult 
+to debug and may only be reported after a long time.
 
 \begin{figure}[!htb]
 \centering
@@ -238,18 +238,18 @@ of the generic logger shown in Figure~\ref{example1}}
 \label{example2}
 \end{figure}
 
-Both of these problems illustrate the problem with text-based diffs. A large 
-amount of time is spent resolving conflicts that should have never occurred and 
+Both of these conditions illustrate problems with text-based diffs. A large 
+amount of time is spent resolving conflicts that could have been avoided and 
 locating bugs that could have been identified ahead of time. All of this time 
 could be used by the project managers to make more meaningful improvements. 
-Understanding the semantics of programs create a barrier for making tools that 
-can understand false-positives and false-negative. With most languages, 
+Not understanding the semantics of programs creates a barrier for making tools 
+that can understand false-positives and false-negative. With most languages, 
 retrieving information about a program's semantics can be challenging. It may 
 be necessary to build a parser, define an abstract syntax tree, and build all 
 the logic for understanding what the syntax constructs do. All that work is 
 redundant because the languages compiler already has the semantic information. 
 The compiler is also the best source for semantic information because it 
-implements the semantics. Most compilers are black boxes, files go in and 
+implements the semantics. Most compilers are black boxes; files go in and 
 programs come out. However, the idea of the compiler as a service has become 
 more popular. With a compiler as a service model, the compiler provides a 
 large API for inspecting and interpreting both the syntax trees and the 
@@ -265,15 +265,13 @@ getting the semantic information from the code. This API lowers the bar for
 developers that want to analyze the semantics of their code, this is why 
 Roslyn provides the ^DiagnosticAnalyzer^ abstract class. It provides callbacks 
 that can be used to implement custom logic that can report ^Diagnostic^ 
-messages back to Roslyn. The analyzers are integrated into the Roslyn pipeline 
-when installed; ^Diagnostic^ messages from the analyzer are shown alongside 
-compiler generated messages. When this analyzer is installed it is integrated 
+messages back to Roslyn. When this analyzer is installed, it is integrated 
 into the Roslyn pipeline and any ^Diagnostic^ messages are shown alongside 
-compiler generated messages. These analyzers are commonly packaged as NuGet 
-packages and installed to projects much like other software dependencies can 
-be installed. Additionally, analyzers are tied to the project therefore only 
-one developer needs to install an analyzer for all the projects developers to 
-start receiving diagnostics.
+compiler generated messages. Analyzers are commonly packaged as NuGet 
+packages and installed to projects like other software dependencies. 
+Additionally, analyzers are tied to the project therefore only one developer 
+needs to install an analyzer for all the projects developers to start receiving 
+diagnostics.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Project Purpose and Goals}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -285,25 +283,25 @@ the situations that create false-positive and false-negative merge conflicts.
 Both of the narratives in the background section could have been prevented if 
 the developer had been warned that someone else was working in an area that 
 could cause problems. If Adam had known that Bob had moved the method, he 
-might have moved the method in his also. If Bob had known that Adam edited the 
+might have moved the method also. If Bob had known that Adam edited the 
 method, he might not have moved it. Similarly, if Ross had known about Smith's 
-changes to the ^Logger^, he would have implemented the ^LogAll^ method. This 
-tool could be created with the ability to locate false-negatives and false-
-positives, fix the conflicts, and automatically merge the resulting changes. 
-However, fixing the resulting conflicts in an automated manner represents an 
-extremely challenging task and is beyond the scope of this project.
+changes to the ^Logger^, he would have implemented the ^LogAll^ method. A 
+tool could be created with the ability to locate false-negatives and 
+false-positives, fix the conflicts, and automatically merge the resulting 
+changes. However, fixing the resulting conflicts in an automated manner 
+represents an extremely challenging task and is beyond the scope of this project.
 
-The goal of SemDiff is not resolving merge conflicts, but preventing false-
-negatives and false-positives before they happen by warning developers when 
-changes are detected that could cause a merge conflict. This preserves the 
+The goal of SemDiff is not resolving merge conflicts, but preventing 
+false-negatives and false-positives before they happen by warning developers 
+when changes are detected that could cause a merge conflict. This preserves the 
 benefits of text-based merging without some of the drawbacks. Text-based diffs 
 and merges are fast, dependable, and already exist in every major version 
 control system. The drawbacks can also be offset by time spent resolving the 
-merge conflicts by hand and building comprehensive test suites to detect false-
-positives. However, software projects tend to be short on time and developers 
-are expensive resources Not enough time is devoted to test suites and managing 
-merge conflicts takes up valuable time. Preventing issues with conflicts helps 
-developers focus more on code and less on repository management.
+merge conflicts by hand and building comprehensive test suites to detect 
+false-positives. However, software projects tend to be short on time and 
+developers are expensive resources; not enough time is devoted to test suites 
+and managing merge conflicts takes up valuable time. Preventing issues with 
+conflicts helps developers focus more on code and less on repository management.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Overall Progress}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -327,12 +325,12 @@ although there are still unresolved bugs.
 The team met with Phillip in February this term. Phillip and the design team 
 agreed more meetings were unnecessary unless the team runs into problems with 
 Roslyn or has to communicate problems about the project. The meeting this term 
-was a check-in show our progress. While there has only been one meeting, the 
-team has been in contact, Phillip has provided feedback on pull requests and 
-in emails.
+was a check-in to show our progress. While there has only been one meeting, the 
+team has been in contact with Phillip, he has provided feedback on pull requests 
+and in emails.
 
 The team met weekly on Mondays to do a code review of any pull requests that 
-have been submitted as well as discuss any questions or concerns a member has 
+have been submitted as well as discuss any questions or concerns a member had 
 moving forward. The team communicated with Facebook's Messenger outside of the 
 meetings and the members have kept themselves updated, leaving few 
 miscommunications and problems.
@@ -383,8 +381,8 @@ is placed in the ^If-None-Match^ header of the request. If the pull request
 list has changed then a new ^ETag^ is received, otherwise the server responds 
 with an HTTP status code of 304 (not modified) indicating that the current 
 data is still accurate. This reduces the number of API calls and reduces time 
-spent sending data between SemDiff and GitHub. Each pull request only 
-downloads the file's contents if they have been changed from the previous time 
+spent sending data between SemDiff and GitHub. Additionally, the file's contents 
+are only downloaded if they have been changed from the previous time 
 they were downloaded. This improves efficiency, reduces bandwidth usage, and 
 reduces file IO overhead. 
 
@@ -476,7 +474,7 @@ public class Files
 \label{GitHubFiles}
 \end{figure}
 
-These files contents are downloaded using two methods. The first method, 
+The file's contents are downloaded using two methods. The first method, 
 ^DownloadFilesAsync()^, checks and sees if the files need to be 
 updated. If they need to be updated, the method iterates through the files of 
 a pull request, checks if they are a modified C\# file and then calls 
@@ -530,9 +528,9 @@ repository. One pull request contained more than three hundred changed files.
 This caused querying GitHub to fail because a new member of the ^StatusEnum^ 
 called ^changed^ was found. The ^StatusEnum^ holds all the possible values of 
 the ^Status^ field of the file object shown in Figure~\ref{GitHubFiles}. The 
-team had to contact GitHub support to find out what the possible value of the 
+team had to contact GitHub support to find out what the possible values of the 
 field were. The response from support informed the team that if the ^Status^ field 
-is set ^Changed^ then that indicates that a diff has been truncated or the 
+is set to ^changed^ then that indicates that a diff has been truncated or the 
 permissions of the file has been changed. This resolved the problem with the 
 ^StatusEnum^, but the team may encounter issues with other undocumented fields.
 
@@ -663,7 +661,7 @@ two makes it challenging to combine the functionality together. In the future
 this will be refactored to remove the repetitive block.
 
 
-\subsubsection{Problems}differing line endings (LF: ^\n^ vs CRLF: ^\r\n^). 
+\subsubsection{Problems}
 
 Currently, files downloaded from GitHub may have different line endings 
 (LF: ^\n^ vs CRLF: ^\r\n^) than the versions cloned locally. When the files 
@@ -718,7 +716,7 @@ else there is no false positive.
 \subsubsection{Methodology}
 The ^ForFalseNegative^ method shown in Figure~\ref{anforfn} contains nearly all 
 of the code for detecting false-negatives. It is an implementation of the 
-steps listed in Figure~\ref{fnalgore} This section breaks down and explores 
+steps listed in Figure~\ref{fnalgore}. This section breaks down and explores 
 the code in manageable chunks.
 
 \begin{figure}[!b]
@@ -748,7 +746,7 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
     {
         var relativePath = GetRelativePath(repo.LocalDirectory, 
 		                                                 c.SyntaxTree.FilePath)
-                                    .Replace('\\', '/'); //Fix Dir Separator!
+                                    .Replace('\\', '/');
 
         return GetPulls(repo, relativePath).SelectMany(t =>
         {
@@ -796,14 +794,14 @@ base class.
 The next two steps are to get the file name from the base class and use it to 
 lookup the pull requests using the file name. For each base class, lines 23-25 
 retrieves the name on lines 23-25. The name is then passed into ^GetPulls^ on 
-line 27. If the file was not found in the changed files for the repo then an 
+line 27. If the file was not found in the changed files for the repo, then an 
 empty ^IEnumerable^ will be returned, otherwise the inner function will be 
 evaluated.
 
 The last steps of the algorithm are to run ^Diff3^ on the components and see if 
 there are conflicts within. Lines 29-40 prepare for the diff call by 
 getting the class declaration from the pull request. Line 42 uses a 
-^MergeClassDeclarationSyntaxes^ helper function to match all the declaration 
+^MergeClassDeclarationSyntaxes^ helper function to match all the declarations 
 together. If there are two class declarations in a file, they need 
 to be matched up between all three versions of the file. Once the class 
 declarations are matched, they are finally compared using ^Diff3^ on line 43. 
@@ -842,7 +840,7 @@ SemDiff will provide a link to the pull request.
 \subsubsection{Progress}
 SemDiff displays false positive warnings as intended. The format of 
 warnings is \textit{``False-Positive between `$<$Name Of File$>$' and 
-`($<$Title of Pull Request$>$)[$<$Link to Github$>$]'\,''}. 
+`($<$Title of Pull Request$>$)[$<$Link to Github$>$]'\,.''} 
 Figure~\ref{fperrorlist} shows an example created by cloning the test repo 
 and checking out the ``A'' side---a similar message would be shown if ``B'' was 
 checked out. Reporting the location of false-positives allows Visual 
@@ -904,8 +902,8 @@ SemDiff will provide a link to the pull request.
 
 SemDiff displays false negative warnings as intended. The format of 
 warnings is \textit{``False-Negatives for type `$<$Type Name (Base 
-Class)$>$' between `($<<$Title of Pull Request$>$)[$<$Link to 
-Github$>$]'\,''}. An example of the warning is shown in 
+Class)$>$' between `($<$Title of Pull Request$>$)[$<$Link to 
+Github$>$]'\,.''} An example of the warning is shown in 
 Figure~\ref{fnerrorlist}. That error was collected by cloning the test repo 
 and checking out the branch that creates a derived class.
 
@@ -920,7 +918,7 @@ the test repo}
 \subsubsection{Future Work}
 
 Unlike the false positives messages, false negative messages don't currently 
-report a location. This prevents hover over errors from being created. Before 
+report a location. This prevents hover over warnings from being created. Before 
 final release the team will need to decide where to report as the location 
 (derived class or base class) and implement the location.
 
@@ -1077,7 +1075,7 @@ documentation inside of the source code.
 
 The team had some difficulty in week one and two with Shawn not being able to 
 commit to GitHub or make new issues, however that was resolved before it 
-impacted productivity. There was also had some difficulty with using Git. The 
+impacted productivity. There was also some difficulty with using Git. The 
 Git plugin for Visual Studio has some usability problems. This led to some 
 code being pushed directly to the master branch. To resolve the issue (and 
 submit the pull request with peer review), the team had to learn how to 
@@ -1150,7 +1148,7 @@ SemDiff is implemented in C\# and uses the Roslyn APIs to compare syntax
 trees. This project would not have been possible without Rosyln. A 
 black box compiler would have necessitated writing a parser and semantic 
 analyzer to complete the project. Roslyn is used in multiple places in SemDiff, 
-the most interesting uses of Roslyn is the ^ForFalseNegative^ function, shown 
+the most interesting use of Roslyn is the ^ForFalseNegative^ function, shown 
 in Figure~\ref{anforfn}, that uses the ^SemanticModel^ to find the base class 
 of the current file.
 
@@ -1182,8 +1180,8 @@ interaction between a system and other systems that utilize it.
 \item[AST:] An Abstract Syntax Tree is a parsed data structure that represents 
 all of the tokens in source code.
 
-\item[Code Smell:] Indicators found in source code that indicate deeper 
-problems in the system.
+\item[Code Smell:] Indicator found in source code that points to a deeper 
+problem in the system.
 
 \item[C\#:] The C\# 6.0 general purpose programming language.
 
