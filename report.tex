@@ -564,7 +564,7 @@ changing the semantics and creates a pull request, the current developer edits
     \item Search through other changes to find the added method (move 
 destination)
     \item Diff3 the inside of the original, changed, and moved
-    \item If there are no conflicts, a false positive has occurred
+    \item If there are no conflicts, a false-positive has occurred
 \end{enumerate}
 \caption{High level overview of how false-positives are detected. `Side' 
 refers to the local copy or the remote copy}
@@ -577,7 +577,7 @@ The algorithm defined in Figure~\ref{fpalgore} has been implemented in the
 ^Analysis^ class. The logic is unchanged from the design document. The test 
 repo has been used for testing the implementation and the results have 
 been promising. Although there were concerns earlier in the project, whitespace 
-doesn't seem to break false positive detection. The test repo has large XML 
+doesn't seem to break false-positive detection. The test repo has large XML 
 comment blocks at the top of methods that are moved with the methods and spaces 
 in between the methods, but the changes were still recognized as a 
 false-positive condition.
@@ -630,7 +630,7 @@ public static IEnumerable<DetectedFalsePositive> ForFalsePositive(Repo repo,
     }
 }
 \end{lstlisting}
-\caption{The ForFalsePositive method handles false positive detection}
+\caption{The ForFalsePositive method handles false-positive detection}
 \label{anforfp}
 \end{figure}
 
@@ -707,7 +707,7 @@ in the design document.
     \item Verify file was changed in pull request
     \item Perform diff3 on base classes
     \item If diff3 revealed conflicts, then there is a possible false-positive 
-else there is no false positive.
+else there is no false-positive.
 \end{enumerate}
 \caption{High level description of how false-negative detection works}
 \label{fnalgore}
@@ -777,7 +777,7 @@ public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
     });
 }
 \end{lstlisting}
-\caption{The ForFalseNegative method handles false negative detection}
+\caption{The ForFalseNegative method handles false-negative detection}
 \label{anforfn}
 \end{figure}
 
@@ -806,7 +806,7 @@ together. If there are two class declarations in a file, they need
 to be matched up between all three versions of the file. Once the class 
 declarations are matched, they are finally compared using ^Diff3^ on line 43. 
 Line 44 filters out classes with no conflicts; any classes that execute line 
-45 are false negatives and are reported.
+45 are false-negatives and are reported.
 
 \subsubsection{Future Work}
 
@@ -838,7 +838,7 @@ SemDiff will provide a link to the pull request.
 \end{quote}
 
 \subsubsection{Progress}
-SemDiff displays false positive warnings as intended. The format of 
+SemDiff displays false-positive warnings as intended. The format of 
 warnings is \textit{``False-Positive between `$<$Name Of File$>$' and 
 `($<$Title of Pull Request$>$)[$<$Link to Github$>$]'\,.''} 
 Figure~\ref{fperrorlist} shows an example created by cloning the test repo 
@@ -858,7 +858,7 @@ test repo}
 \begin{figure}[!htb]
 \centering
 \includegraphics[scale=1]{FalsePositiveHoverOver}
-\caption{False positives support warnings with squiggles and hover over 
+\caption{False-positives support warnings with squiggles and hover over 
 messages. This shows that the changes to Function12 could cause a 
 false-positive}
 \label{fphoverover}
@@ -866,7 +866,7 @@ false-positive}
 
 \subsubsection{Future Work}
 
-The false positive warnings display correctly, however there are a few ways 
+The false-positive warnings display correctly, however there are a few ways 
 that they can be improved. Figure~\ref{fphoverover} shows underlines over the 
 entire function. With larger functions that will be obnoxious. Instead the 
 underline should be placed under the identifier only. The current message 
@@ -900,7 +900,7 @@ SemDiff will provide a link to the pull request.
 
 \subsubsection{Progress}
 
-SemDiff displays false negative warnings as intended. The format of 
+SemDiff displays false-negative warnings as intended. The format of 
 warnings is \textit{``False-Negatives for type `$<$Type Name (Base 
 Class)$>$' between `($<$Title of Pull Request$>$)[$<$Link to 
 Github$>$]'\,.''} An example of the warning is shown in 
@@ -917,7 +917,7 @@ the test repo}
 
 \subsubsection{Future Work}
 
-Unlike the false positives messages, false negative messages don't currently 
+Unlike the false-positives messages, false-negative messages don't currently 
 report a location. This prevents hover over warnings from being created. Before 
 final release the team will need to decide where to report as the location 
 (derived class or base class) and implement the location.
