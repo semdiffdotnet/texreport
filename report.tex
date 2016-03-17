@@ -279,7 +279,7 @@ represents an extremely challenging task and is beyond the scope of this project
 The goal of SemDiff is not resolving merge conflicts, but preventing 
 false-negatives and false-positives before they happen by warning developers 
 when changes are detected that could cause a merge conflict. This preserves the 
-benefits of text-based merging without some of the drawbacks. Text-based diffs 
+benefits of text-based merging without as many drawbacks. Text-based diffs 
 and merges are fast, dependable, and already exist in every major version 
 control system. The drawbacks can also be offset by time spent resolving the 
 merge conflicts by hand and building comprehensive test suites to detect 
@@ -482,7 +482,7 @@ private async Task DownloadFileAsync(int prNum, string path, string sha,
 \label{DownloadFileAsync}
 \end{figure}
 
-The ^RepoFolder^ is a path to the ^AppData^ folder with some more details 
+The ^RepoFolder^ is a path to the ^AppData^ folder with more details 
 encoded in the path to allow multiple projects. For instance, the repo 
 \textit{\url{github.com /semdiffdotnet/curly-broccoli.git}} has an issue 
 number 1 that will be stored at 
@@ -559,7 +559,7 @@ The algorithm defined in Figure~\ref{fpalgore} has been implemented in the
 ^Analysis^ class. The logic is unchanged from the design document. The test 
 repo has been used for testing the implementation and the results have 
 been promising. Although there were concerns earlier in the project, whitespace 
-doesn't seem to break false-positive detection. The test repo has large XML 
+does not seem to break false-positive detection. The test repo has large XML 
 comment blocks at the top of methods that are moved with the methods and spaces 
 in between the methods, but the changes were still recognized as a 
 false-positive condition.
@@ -648,7 +648,7 @@ this will be refactored to remove the repetitive block.
 Currently, files downloaded from GitHub may have different line endings 
 (LF: ^\n^ vs CRLF: ^\r\n^) than the versions cloned locally. When the files 
 are processed by ^Diff^ it is then interpreted as adding (or removing) a 
-character on each line. Although this isn't directly a bug with the function 
+character on each line. Although this is not directly a bug with the function 
 shown in Figure~\ref{anforfp}, this makes determining false-positives 
 difficult because extra lines are included in the conflicts.
 
@@ -852,8 +852,8 @@ The false-positive warnings display correctly, however there are a few ways
 that they can be improved. Figure~\ref{fphoverover} shows underlines over the 
 entire function. With larger functions that will be obnoxious. Instead the 
 underline should be placed under the identifier only. The current message 
-format also doesn't specify whether the current message was moved locally 
-or remotely. An improvement would be displaying something like ``method has 
+format also does not specify whether the current message was moved locally 
+or remotely. An improvement would be displaying a message like ``method has 
 been moved, but was edited in a pull request'' or ``edited method was moved in a 
 pull request.''
 
@@ -899,7 +899,7 @@ the test repo}
 
 \subsubsection{Future Work}
 
-Unlike the false-positives messages, false-negative messages don't currently 
+Unlike the false-positives messages, false-negative messages do not currently 
 report a location. This prevents hover over warnings from being created. Before 
 final release the team will need to decide where to report as the location 
 (derived class or base class) and implement the location.
@@ -1047,7 +1047,7 @@ Figure~\ref{wikilist} shows the pages that are currently created.
 
 \subsubsection{Future Work}
 
-To complete this requirement, a lot more content needs to be added to the 
+To complete this requirement, more content needs to be added to the 
 wiki, including an API Guide and code examples that detail the parts of the 
 application. The Getting Started Guide will need to be filled with simple yet 
 important information. A performance section that details how SemDiff affects 
@@ -1057,10 +1057,10 @@ documentation inside of the source code.
 
 \subsubsection{Problems}
 
-The team had some difficulty in week one and two with Shawn not being able to 
+The team had difficulty in week one and two with Shawn not being able to 
 commit to GitHub or make new issues, however that was resolved before it 
-impacted productivity. There was also some difficulty with using Git. The 
-Git plugin for Visual Studio has some usability problems. This led to some 
+impacted productivity. There was also difficulty with using Git. The 
+Git plugin for Visual Studio has a number of usability problems. This led to 
 code being pushed directly to the master branch. To resolve the issue (and 
 submit the pull request with peer review), the team had to learn how to 
 revert commits and revert merge commits. Before things were figured out a 
