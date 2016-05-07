@@ -132,7 +132,7 @@ all tests so he creates a pull request. Later, their manager, Chris, verifies th
 The second problem is known as a false-negative. A false-negative occurs when text-based tools do not find a conflict between changed files even though there is a semantic conflict. False-negatives are subtle and can introduce runtime bugs that are difficult to locate. These conflicts usually occur across files that have a semantic connection. For example, a developer, Ross, is implementing a new ^DatabaseLogger^. The project already has a generic ^Logger^ that writes logs to the console as shown in Figure~\ref{example1}. Ross creates a ^DatabaseLogger^ class derived from ^Logger^ and overrides the ^Log^ method with new logic to store logs in a database. Ross does not override ^LogAll^ because he sees that it merely delegates to the ^Log^ method. However, before Ross' changes are merged, another developer, Smith, notices 
 that it is inefficient for the ^Logger^ in Figure~\ref{example1} to be calling ^Log^ for every log instead of writing them all at once, so Smith creates the logger shown in Figure~\ref{example2}. Smith is unaware of Ross' work and Ross is unaware of Smith's work. When their manager, Chris, merges their pull requests he finds that they merge with out errors. After all, Ross and Smith edited different files. Even though they merge without error and both Ross' and Smith's versions work correctly there is now a bug in the code. Calling the ^LogAll^ method on the ^DatabaseLogger^ will log to the console, not the database. Because of the subtle nature of this bug, it will be difficult to debug and may only be reported after a long time.
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
 \begin{lstlisting}
 public class Logger
@@ -154,7 +154,7 @@ public class Logger
 \label{example1}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
 \begin{lstlisting}
 public class Logger
@@ -244,7 +244,7 @@ The cached data is stored within the git repository, but the gitignore is update
 
 SemDiff uses ^Newtonsoft.Json^ and Microsoft's ^HttpClient^ library to query and parse GitHub's API. ^Newtonsoft.Json^ parses JSON, allowing SemDiff to have a function that handles all the JSON with one line of code. In order to handle API errors the actual function, shown in Figure~\ref{deserializeNewtonsoft}, is slightly longer. Each call to an API requires a class that mirrors the data structure of the JSON. For example, the call for getting pull requests uses the class shown in Figure~\ref{PullRequestCode}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{lstlisting}
 private static T DeserializeWithErrorHandling<T>(string content)
@@ -343,7 +343,7 @@ The algorithm defined in Figure~\ref{fpalgore} has been implemented in the ^Anal
 does not seem to break false-positive detection. The test repo has large XML comment blocks at the top of methods that are moved with the methods and spaces in between the methods, but the changes were still recognized as a false-positive condition.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{enumerate}
     \item Call ^Diff3^ on syntax trees
@@ -451,7 +451,7 @@ False-negative detection has been implemented and successfully detects the condi
 \subsubsection{Methodology}
 The ^ForFalseNegative^ method shown in Figure~\ref{anforfn} contains nearly all of the code for detecting false-negatives. It is an implementation of the steps listed in Figure~\ref{fnalgore}. This section breaks down and explores the code in manageable chunks.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{enumerate}
     \item Verify file was changed locally
@@ -466,7 +466,7 @@ else there is no false-positive.
 \label{fnalgore}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[ht]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalseNegative> ForFalseNegative(Repo repo,
@@ -539,21 +539,21 @@ SemDiff will provide a link to the pull request.
 \subsubsection{Feature Overview}
 SemDiff displays false-positive warnings as intended. The format of warnings is \textit{``Method `$<$Name Of Method$>$' was moved, but was also changed in a pull request - `$<$Title of Pull Request$>$' ($<$Link to GitHub$>$).''} Figure~\ref{fperrorlist1} shows an example created by cloning the test repo and checking out the ``A'' side; a similar message shown in Figure~\ref{fperrorlist2} would be shown if ``B'' was checked out. Reporting the location of false-positives allows Visual Studio to provide squiggles and hover over messages as shown in Figure~\ref{fphoverover}.
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \includegraphics[scale=1]{FalsePositiveErrorListMoved}
 \caption{Visual Studio's error list showing a false-positive reported in the test repo when the local method has been moved}
 \label{fperrorlist1}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \includegraphics[scale=1]{FalsePositiveErrorListChanged}
 \caption{Visual Studio's error list showing a false-positive reported in the test repo when the local method has been changed}
 \label{fperrorlist2}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[p]
 \centering
 \includegraphics[scale=.5]{FalsePositiveHoverOver}
 \caption{False-positives support warnings with squiggles and hover over messages. This shows that the changes to Function12 could cause a 
@@ -618,7 +618,7 @@ SemDiff will provide a NuGet package that can be installed to a VS project as an
 \subsubsection{Feature Overview}
 The project currently produces a NuGet package. Figures \ref{pacmansmall} and \ref{pacman} shows how the package appears in the NuGet package manager. The package is currently available in the NuGet Gallery and can be installed with ^Install-Package SemDiff^. The package can also be viewed at \url{https://www.nuget.org/packages/SemDiff}. That page contains interesting information including the number of times the package has been downloaded.
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
 \includegraphics[scale=.4]{SemDiffInPackageManagerSmall}
 \caption{This is how the SemDiff package is displayed in the NuGet package manager}
@@ -695,7 +695,7 @@ All source code, documentation, and issue tracking should be hosted publicly on 
 
 \end{quote}
 
-\begin{figure}[!hb]
+\begin{figure}[hb]
 \centering
 \includegraphics[scale=.8]{WikiList}
 \caption{List of all pages captured from the wiki}
@@ -703,9 +703,9 @@ All source code, documentation, and issue tracking should be hosted publicly on 
 \end{figure}
 
 \subsubsection{Feature Overview}
-The project source code is hosted on GitHub, and the team has also used the issue tracking, pull requests, and milestone features built into GitHub. Currently there are 4 milestones, 5 open issues, 33 closed issues, and 54 closed pull requests. Each of the milestones has gotten to 100\% completion. The wiki is fully set up and also links to an API which was created using Doxygen. Figure~\ref{wikilist} shows navigation menu for the wiki and lists all the created pages.
+The project source code is hosted on GitHub. The team has also used the issue tracking, pull requests, and milestone features built into GitHub. Currently there are 4 milestones, 5 open issues, 33 closed issues, and 54 closed pull requests. Each of the milestones has gotten to 100\% completion. The wiki is fully set up and also links to an API which was created using Doxygen. Figure~\ref{wikilist} shows navigation menu for the wiki and lists all the created pages.
 
-The terminology have is there to help new users get acquainted with the many of the common terms used within this project. The main terms being false-positive and false-negative. The installation section is a brief walkthrough on how to use NuGet to install SemDiff. The configuration page is there to help users create an authentication token and update the configuration file. The examples page is designed to help the users better understand a real life situation in which a false-negative or false-positive can occur. The SemDiff Warnings section is a page that describes each of the warnings that SemDiff can throw in order to help the user understand what SemDiff is trying to flag in case the warning itself is not clear enough.
+The terminology section is there to help new users get acquainted with the common terms used within this project. The main terms being false-positive and false-negative. The installation section is a brief walkthrough on how to use NuGet to install SemDiff. The configuration page is there to help users create an authentication token and update the configuration file. The examples page is designed to help the users better understand a real life situation in which a false-negative or false-positive can occur. The SemDiff Warnings section is a page that describes each of the warnings that SemDiff can throw in order to help the user understand what SemDiff is trying to flag in case the warning itself is not clear enough.
 
 The developer tools include and introduction to the API and a link to the API. The API is also hosted within a gh-pages branch on GitHub. 
 
@@ -729,7 +729,7 @@ All outputs of the project should be open source and licensed with the MIT licen
 
 A copy of the MIT license is available at the root of the GitHub repo and the final package includes a link to the MIT license. A comment shown on Figure~\ref{mitheader} appears at the top of each file. This is not strictly required by the MIT license (unlike the GPLv3), but is still considered a best practice. That line was inspired by a similar line that appears in the Roslyn source code.
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
 \begin{lstlisting}
 // Copyright (c) 2015 semdiffdotnet. Distributed under the MIT License. 
