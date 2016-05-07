@@ -244,7 +244,7 @@ The cached data is stored within the git repository, but the gitignore is update
 
 SemDiff uses ^Newtonsoft.Json^ and Microsoft's ^HttpClient^ library to query and parse GitHub's API. ^Newtonsoft.Json^ parses JSON, allowing SemDiff to have a function that handles all the JSON with one line of code. In order to handle API errors the actual function, shown in Figure~\ref{deserializeNewtonsoft}, is slightly longer. Each call to an API requires a class that mirrors the data structure of the JSON. For example, the call for getting pull requests uses the class shown in Figure~\ref{PullRequestCode}.
 
-\begin{figure}[!htb]
+\begin{figure}[h]
 \centering
 \begin{lstlisting}
 private static T DeserializeWithErrorHandling<T>(string content)
@@ -264,9 +264,7 @@ private static T DeserializeWithErrorHandling<T>(string content)
 \label{deserializeNewtonsoft}
 \end{figure}
 
-
-
-\begin{figure}[p]
+\begin{figure}[ht]
 \centering
 \begin{lstlisting}
 public class PullRequest
@@ -294,7 +292,8 @@ public class PullRequest
 
 The ^IList^ of ^Files^ in Figure~\ref{PullRequestCode} is not setup on the initial parsing because the files are not retrieved with the list of pull requests. Once the list of pull requests has been retrieved from GitHub an API call is made for each of the open pull requests that were found. File metadata is retrieved and deserialized with the class shown in Figure~\ref{GitHubFiles}. 
 
-\begin{figure}[p]
+
+\begin{figure}[t]
 \centering
 \begin{lstlisting}
 public class RepoFile
@@ -322,6 +321,8 @@ This is the hardest part of the system to test, but also the most critical. SemD
 
 Additionally, although the GitHub API documentation fairly comprehensive, it is missing a few details that could be convenient. For instance, field specific documentation is missing. SemDiff ran into this when testing pagination on the Roslyn repository. One pull request contained more than three hundred changed files. This caused querying GitHub to fail because a new member of the ^StatusEnum^ called ^changed^ was found. The ^StatusEnum^ holds all the possible values of the ^Status^ field of the file object shown in Figure~\ref{GitHubFiles}. The team had to contact GitHub support to find out what the possible values of the field were. The response from support informed the team that if the ^Status^ field is set to ^changed^ then that indicates that a diff has been truncated or the permissions of the file has been changed. This resolved the problem with the ^StatusEnum^, but the team may encounter issues with other undocumented fields.
 
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Detecting False-Positives}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -335,6 +336,12 @@ SemDiff will detect changes between two version of a file that will cause a text
 Specifically: Another developer moves a function, ^Foo()^, in Bar.cs without changing the semantics and creates a pull request, the current developer edits ^Foo()^ in its original location in Bar.cs. This creates a false-positive.
 
 \end{quote}
+
+\subsubsection{Feature Overview}
+
+The algorithm defined in Figure~\ref{fpalgore} has been implemented in the ^Analysis^ class. The logic is unchanged from the design document. The test repo has been used for testing the implementation and the results have been promising. Although there were concerns earlier in the project, whitespace 
+does not seem to break false-positive detection. The test repo has large XML comment blocks at the top of methods that are moved with the methods and spaces in between the methods, but the changes were still recognized as a false-positive condition.
+
 
 \begin{figure}[h]
 \centering
@@ -355,12 +362,7 @@ refers to the local copy or the remote copy}
 \label{fpalgore}
 \end{figure}
 
-\subsubsection{Feature Overview}
-
-The algorithm defined in Figure~\ref{fpalgore} has been implemented in the ^Analysis^ class. The logic is unchanged from the design document. The test repo has been used for testing the implementation and the results have been promising. Although there were concerns earlier in the project, whitespace 
-does not seem to break false-positive detection. The test repo has large XML comment blocks at the top of methods that are moved with the methods and spaces in between the methods, but the changes were still recognized as a false-positive condition.
-
-\begin{figure}[!h]
+\begin{figure}[!p]
 \centering
 \begin{lstlisting}
 public static IEnumerable<DetectedFalsePositive> 
@@ -425,6 +427,8 @@ public static IEnumerable<DetectedFalsePositive>
 The ^ForFalsePositive^ method shown in Figure~\ref{anforfp} is the implementation for the algorithm shown in Figure~\ref{fpalgore}. This section will break the method into more manageable sections and explain them.
 
 The purpose of first part of method, lines 4-5, is to get the remaining syntax trees from the pull requests that will be passed into the call to ^Diff3.Compare^ on line 8. The statement on line 10 and 11 gets all the conflicts contained within methods and enumerates them in an ^foreach^ loop. The statement on line 18 gets the ancestor method and the ^GetInnerMethodConflicts^ helper method called on line 20 looks at the list of inserted methods populated on lines 10-11 in order to retrieve the matching function that was inserted. The helper function uses that information to do a ^Diff3.Compare^ on the code contained within each of the methods and returns the result. Line 32 filters out the conflicting changes. If the local was not moved, then ^GetInnerMethodConflicts^ is run again with changed arguments. The remaining are false-positives and are returned.
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Detecting False-Negatives}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -550,12 +554,13 @@ SemDiff displays false-positive warnings as intended. The format of warnings is 
 \end{figure}
 
 \begin{figure}[!htb]
-\centering % For some reason I had to set this to .5 to get a reasonable size
+\centering
 \includegraphics[scale=.5]{FalsePositiveHoverOver}
 \caption{False-positives support warnings with squiggles and hover over messages. This shows that the changes to Function12 could cause a 
 false-positive}
 \label{fphoverover}
 \end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Displaying False-Negatives Warnings in Error List}%%%%%%%%%%%%%%%%%
@@ -581,7 +586,7 @@ SemDiff will provide a link to the pull request.
 
 SemDiff displays false-negative warnings as intended. The format of warnings is \textit{``The base class of `$<$Type Name$>$' (`$<$Base Class$>$') was changed in a pull request - `$<$Title of Pull Request$>$' ($<$Link to GitHub$>$).''}  Figure~\ref{fnerrorlist} in an example that was collected by cloning the test repo and checking out the branch that creates a derived class. Because the location of the derived class is reported, the hover over message in Figure~\ref{fnhoverover} is also shown.
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
 \includegraphics[scale=1]{FalseNegativeErrorList}
 \caption{Visual Studio's error list showing a false-negative reported in 
@@ -589,12 +594,14 @@ the test repo}
 \label{fnerrorlist}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[htb]
 \centering
-\includegraphics[scale=0.5]{FalseNegativeHoverOver}
+\includegraphics[scale=.5]{FalseNegativeHoverOver}
 \caption{False-negatives support warnings with squiggles and hover over messages. This shows that the Logger class has been changed in two pull requests}
 \label{fnhoverover}
 \end{figure}
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{NuGet Package}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -622,7 +629,7 @@ The project currently produces a NuGet package. Figures \ref{pacmansmall} and \r
 
 Learning the nuspec configuration format was a significant barrier for this requirement. Few people have documented building a NuGet package for Roslyn Analyzers. Analyzers are very different from most packages and require a different method for building the NuGet package. For example, packages usually have dependencies, but analyzers cannot have dependencies because that would result in extra packages being installed to the project.
 
-\begin{figure}[!h]
+\begin{figure}[t]
 \centering
 \includegraphics[scale=.4]{SemDiffInPackageManager}
 \caption{After the package is selected, this larger window is displayed in the NuGet package manager}
@@ -667,12 +674,14 @@ with the user. Therefore, alerts must contain all the information required to un
 
 Diagnostic messages were significantly changed from their initial versions to be much more detailed and easy to understand. Additionally, different internal errors have different error codes. All error codes are described on a special page on the wiki. Figure~\ref{diagnostic} shows all of the diagnostics that SemDiff provides to Visual Studio.
 
-\begin{figure}[!b]
+\begin{figure}[t]
 \centering
-\includegraphics[scale=.8]{Diagnostic}
+\includegraphics[scale=.4]{Diagnostic}
 \caption{Captured list of all the diagnostic messages that SemDiff can produce}
 \label{diagnostic}
 \end{figure}
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{GitHub Project Hosting}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -686,7 +695,7 @@ All source code, documentation, and issue tracking should be hosted publicly on 
 
 \end{quote}
 
-\begin{figure}[!b]
+\begin{figure}[!hb]
 \centering
 \includegraphics[scale=.8]{WikiList}
 \caption{List of all pages captured from the wiki}
@@ -730,6 +739,8 @@ A copy of the MIT license is available at the root of the GitHub repo and the fi
 \label{mitheader}
 \end{figure}
 
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Documentation in Code}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -744,7 +755,6 @@ Source code will contain header comments on public classes, public interfaces, a
 
 The public items have good descriptions using the XML documentation, and there are no redundant comments inside the methods. Any methods added in the future will also have full XML comments.
 
-\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Development Technology}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
